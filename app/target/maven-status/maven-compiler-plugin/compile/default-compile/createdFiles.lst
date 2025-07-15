@@ -1,0 +1,4 @@
+br/edu/ifba/inf008/App.class
+br/edu/ifba/inf008/infrastructure/controllers/UIController.class
+br/edu/ifba/inf008/Core.class
+br/edu/ifba/inf008/infrastructure/controllers/PluginController.class
