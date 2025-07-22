@@ -1,63 +1,100 @@
 package br.edu.ifba.inf008.infrastructure.controllers;
 
 import br.edu.ifba.inf008.App;
-import br.edu.ifba.inf008.core.IPluginController;
 import br.edu.ifba.inf008.core.IPlugin;
+import br.edu.ifba.inf008.core.IPluginController;
+import br.edu.ifba.inf008.core.domain.annotations.Plugin;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.jar.JarFile;
 
 public class PluginController implements IPluginController {
-  private final List<String> enabledPlugins = new ArrayList<>();
 
-  public List<String> getEnabledPlugins() {
-    return enabledPlugins;
-  }
+    private final List<String> enabledPlugins = new ArrayList<>();
+    private final LinkedHashSet<ClassLoader> pluginClassLoaders = new LinkedHashSet<>();
 
-  public boolean isPluginEnabled(String pluginName) {
-    return enabledPlugins.contains(pluginName);
-  }
-
-  public void init() {
-    try {
-      File currentDir = new File("./plugins");
-      FilenameFilter jarFilter = (_, name) -> name.toLowerCase().endsWith(".jar");
-
-      String[] pluginFiles = currentDir.list(jarFilter);
-
-      if (pluginFiles == null || pluginFiles.length == 0) {
-        System.out.println("No plugins found in the ./plugins directory.");
-        return;
-      }
-
-      URL[] jarFilesURL = new URL[pluginFiles.length];
-
-      for (int index = 0; index < pluginFiles.length; index++) {
-        jarFilesURL[index] = (new File("./plugins/" + pluginFiles[index])).toURI().toURL();
-      }
-
-      URLClassLoader urlClassLoader = new URLClassLoader(jarFilesURL, App.class.getClassLoader());
-
-      for (String pluginFile : pluginFiles) {
-        String pluginName = pluginFile.split("\\.")[0];
-        Class<?> pluginClass = Class.forName("br.edu.ifba.inf008.plugins." + pluginName, true, urlClassLoader);
-
-        IPlugin plugin = (IPlugin) pluginClass.getDeclaredConstructor().newInstance();
-
-        try {
-          plugin.init();
-        } catch (Exception e) {
-          System.out.println("Failed to initialize plugin: " + pluginName + " - " + e.getMessage());
-          continue;
-        }
-
-        enabledPlugins.add(pluginName);
-      }
-    } catch (Exception e) {
-      System.out.println("Error: " + e.getClass().getName() + " - " + e.getMessage());
+    public List<String> getEnabledPlugins() {
+        return enabledPlugins;
     }
-  }
+
+    public boolean isPluginEnabled(String pluginName) {
+        return enabledPlugins.contains(pluginName);
+    }
+
+    public void init() {
+        try {
+            File pluginsDir = new File("./plugins");
+            FilenameFilter jarFilter = (dir, name) -> name.toLowerCase().endsWith(".jar");
+
+            String[] pluginFiles = pluginsDir.list(jarFilter);
+
+            if (pluginFiles == null || pluginFiles.length == 0) {
+                System.out.println("No plugins found in the ./plugins directory.");
+                return;
+            }
+
+            for (String pluginFileName : pluginFiles) {
+                File jarFile = new File(pluginsDir, pluginFileName);
+                URL jarUrl = jarFile.toURI().toURL();
+                URL[] urls = new URL[]{jarUrl};
+
+                URLClassLoader urlClassLoader = new URLClassLoader(urls,
+                        App.class.getClassLoader());
+
+                try (JarFile jar = new JarFile(jarFile)) {
+                    jar.stream().filter(jarEntry -> jarEntry.getName().endsWith(".class"))
+                            .forEach(jarEntry -> {
+                                String className = jarEntry.getName().replace('/', '.')
+                                        .replace(".class", "");
+
+                                if (!className.startsWith("br.edu.ifba.inf008.plugins")) {
+                                    return;
+                                }
+
+                                try {
+                                    Class<?> clazz = urlClassLoader.loadClass(className);
+
+                                    if (clazz.isAnnotationPresent(Plugin.class)) {
+                                        if (IPlugin.class.isAssignableFrom(clazz)) {
+                                            IPlugin pluginInstance = (IPlugin) clazz.getDeclaredConstructor()
+                                                    .newInstance();
+
+                                            Plugin annotation = clazz.getAnnotation(Plugin.class);
+
+                                            pluginInstance.init();
+
+                                            enabledPlugins.add(annotation.name());
+                                            System.out.println(
+                                                    "Plugin enabled: " + annotation.name());
+                                        } else {
+                                            System.out.println("Class " + className
+                                                    + " is annotated with @Plugin but does not implement IPlugin interface.");
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println(
+                                            "Error loading plugin class " + className + ": "
+                                                    + e.getMessage());
+                                }
+                            });
+                }
+
+                pluginClassLoaders.add(urlClassLoader);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getClass().getName() + " - " + e.getMessage());
+        }
+    }
+
+    @Override
+    public LinkedHashSet<ClassLoader> getPluginClassLoaders() {
+        return pluginClassLoaders;
+    }
+
 }

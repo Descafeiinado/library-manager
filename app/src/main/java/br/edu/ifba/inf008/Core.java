@@ -1,32 +1,53 @@
 package br.edu.ifba.inf008;
 
-import br.edu.ifba.inf008.core.*;
+import br.edu.ifba.inf008.core.ICore;
+import br.edu.ifba.inf008.core.IPluginController;
+import br.edu.ifba.inf008.core.IUIController;
+import br.edu.ifba.inf008.core.infrastructure.managers.HibernateManager;
 import br.edu.ifba.inf008.infrastructure.controllers.PluginController;
 import br.edu.ifba.inf008.infrastructure.controllers.UIController;
 
 public class Core extends ICore {
-  private Core() {
-  }
 
-  public static boolean init() {
-    if (instance != null) {
-      System.out.println("Fatal error: core is already initialized!");
-      System.exit(-1);
+    private final IPluginController pluginController = new PluginController();
+
+    private Core() {
     }
 
-    instance = new Core();
-    UIController.launch(UIController.class);
+    public static void init() {
+        System.out.println("Initializing core...");
 
-    return true;
-  }
+        if (instance != null) {
+            System.out.println("Fatal error: core is already initialized!");
+            System.exit(-1);
+        }
 
-  public IUIController getUIController() {
-    return UIController.getInstance();
-  }
+        instance = new Core();
 
-  public IPluginController getPluginController() {
-    return pluginController;
-  }
+        UIController.launch(UIController.class);
 
-  private IPluginController pluginController = new PluginController();
+        Core.getInstance().shutdown();
+    }
+
+    @Override
+    public void startup() {
+        Core.getInstance().getPluginController().init();
+        Core.getInstance().getUIController().postPluginInit();
+
+        HibernateManager.buildSessionFactory();
+    }
+
+    @Override
+    public void shutdown() {
+        HibernateManager.shutdownSessionFactory();
+    }
+
+    public IUIController getUIController() {
+        return UIController.getInstance();
+    }
+
+    public IPluginController getPluginController() {
+        return pluginController;
+    }
+
 }

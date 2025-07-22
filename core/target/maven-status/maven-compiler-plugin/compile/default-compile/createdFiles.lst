@@ -1,5 +1,0 @@
-br/edu/ifba/inf008/core/IPluginController.class
-br/edu/ifba/inf008/core/IPlugin.class
-br/edu/ifba/inf008/core/ICore.class
-br/edu/ifba/inf008/core/infrastructure/managers/HibernateManager.class
-br/edu/ifba/inf008/core/IUIController.class

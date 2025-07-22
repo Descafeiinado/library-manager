@@ -1,9 +1,14 @@
 package br.edu.ifba.inf008.core;
 
-import javafx.scene.control.MenuItem;
+import br.edu.ifba.inf008.core.ui.models.TabInformation;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 
-public interface IUIController
-{
-    boolean createTab(String tabText, Node contents);
+public interface IUIController {
+
+    void postPluginInit();
+
+    boolean createTab(TabInformation tabInformation, Node contents);
+
+    ImageView loadIcon(String path);
 }

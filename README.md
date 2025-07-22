@@ -17,15 +17,16 @@ mvn exec:java -pl app
         <module>plugins/myplugin</module>
         ADD IT HERE
     </modules>
-    
+
 3. Create your new plugin's pom.xml (check myplugin/pom.xml)
 4. Remember to use plugin's package conventions:
 
-    br/edu/ifba/inf008/plugins/<YourPluginNameInCamelCase>.java
-    
+   br/edu/ifba/inf008/plugins/<YourPluginNameInCamelCase>.java
+
 5. Run "mvn install" and "mvn exec:java -pl app"
 
 # MariaDB Docker
+
 ## Starting the database
 
 docker-compose up -d
