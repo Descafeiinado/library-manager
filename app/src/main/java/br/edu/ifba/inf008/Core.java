@@ -6,6 +6,7 @@ import br.edu.ifba.inf008.core.IUIController;
 import br.edu.ifba.inf008.core.infrastructure.managers.HibernateManager;
 import br.edu.ifba.inf008.infrastructure.controllers.PluginController;
 import br.edu.ifba.inf008.infrastructure.controllers.UIController;
+import java.util.Locale;
 
 public class Core extends ICore {
 
@@ -15,6 +16,8 @@ public class Core extends ICore {
     }
 
     public static void init() {
+        Locale.setDefault(Locale.US);
+
         System.out.println("Initializing core...");
 
         if (instance != null) {

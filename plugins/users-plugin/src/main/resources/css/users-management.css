@@ -1,0 +1,27 @@
+.um-main-content {
+    -fx-padding: 20;
+    -fx-background-color: #f9f9f9;
+}
+
+.um-header {
+    -fx-padding: 0 0 10 0;
+    -fx-alignment: center-left;
+}
+
+.um-title-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.um-icon-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-padding: 6 12;
+    -fx-background-radius: 6;
+    -fx-font-size: 13px;
+    -fx-graphic-text-gap: 6px;
+}
+
+.um-icon-button:hover {
+    -fx-background-color: #45a049;
+}

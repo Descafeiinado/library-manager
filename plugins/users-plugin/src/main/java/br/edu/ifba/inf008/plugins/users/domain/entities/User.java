@@ -1,5 +1,6 @@
 package br.edu.ifba.inf008.plugins.users.domain.entities;
 
+import br.edu.ifba.inf008.core.ui.annotations.TableIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -21,6 +22,7 @@ public class User {
     private LocalDateTime registeredAt;
 
     @Column(name = "deactivated_at")
+    @TableIgnore
     private LocalDateTime deactivatedAt;
 
     public User() {
@@ -63,6 +65,14 @@ public class User {
 
     public void setRegisteredAt(LocalDateTime registeredAt) {
         this.registeredAt = registeredAt;
+    }
+
+    public LocalDateTime getDeactivatedAt() {
+        return deactivatedAt;
+    }
+
+    public void setDeactivatedAt(LocalDateTime deactivatedAt) {
+        this.deactivatedAt = deactivatedAt;
     }
 
 }

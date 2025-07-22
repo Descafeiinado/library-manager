@@ -61,6 +61,8 @@ public class PluginController implements IPluginController {
 
                                     if (clazz.isAnnotationPresent(Plugin.class)) {
                                         if (IPlugin.class.isAssignableFrom(clazz)) {
+                                            pluginClassLoaders.add(urlClassLoader);
+
                                             IPlugin pluginInstance = (IPlugin) clazz.getDeclaredConstructor()
                                                     .newInstance();
 
@@ -83,8 +85,6 @@ public class PluginController implements IPluginController {
                                 }
                             });
                 }
-
-                pluginClassLoaders.add(urlClassLoader);
             }
 
         } catch (Exception e) {

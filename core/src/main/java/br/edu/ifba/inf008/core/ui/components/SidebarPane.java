@@ -1,5 +1,6 @@
-package br.edu.ifba.inf008.ui.components;
+package br.edu.ifba.inf008.core.ui.components;
 
+import br.edu.ifba.inf008.core.ui.SFX;
 import java.net.URL;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -68,7 +69,7 @@ public class SidebarPane extends VBox {
 
     private void playClickSound() {
         try {
-            URL soundURL = getClass().getResource("/sfx/click.wav");
+            URL soundURL = getClass().getResource(SFX.CLICK);
 
             if (soundURL != null) {
                 Media media = new Media(soundURL.toString());

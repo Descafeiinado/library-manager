@@ -3,11 +3,16 @@ package br.edu.ifba.inf008.infrastructure.controllers;
 import br.edu.ifba.inf008.Core;
 import br.edu.ifba.inf008.core.ICore;
 import br.edu.ifba.inf008.core.IUIController;
+import br.edu.ifba.inf008.core.ui.CSS;
+import br.edu.ifba.inf008.core.ui.Icons;
+import br.edu.ifba.inf008.core.ui.components.SidebarPane;
 import br.edu.ifba.inf008.core.ui.models.TabInformation;
-import br.edu.ifba.inf008.ui.Icons;
-import br.edu.ifba.inf008.ui.components.SidebarPane;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,10 +32,11 @@ public class UIController extends Application implements IUIController {
     private static final String MAIN_TAB = "Homepage";
     private static UIController uiController = new UIController();
 
-    private Map<String, Node> tabContents;
+    private final Map<String, Supplier<Node>> lazyTabContents = new HashMap<>();
 
     private SidebarPane sidebar;
     private VBox centerContent;
+    private Scene scene;
 
     public UIController() {
     }
@@ -48,16 +54,97 @@ public class UIController extends Application implements IUIController {
     }
 
     @Override
+    public void loadStylesheet(String path) {
+        if (tryLoadStylesheet(path, getClass().getClassLoader())) {
+            return;
+        }
+
+        System.err.println("Failed to load stylesheet: " + path + " - Searching in plugin class loaders.");
+
+        boolean loadedFromPlugins = false;
+
+        for (ClassLoader pluginClassLoader : Core.getInstance().getPluginController().getPluginClassLoaders()) {
+            if (tryLoadStylesheet(path, pluginClassLoader)) {
+                loadedFromPlugins = true;
+                break;
+            }
+        }
+
+        if (!loadedFromPlugins) {
+            System.err.println("Even plugin class loaders couldn't resolve the stylesheet: " + path);
+        }
+    }
+
+    private boolean tryLoadStylesheet(String path, ClassLoader loader) {
+        String correctedPath = correctClassLoaderPath(path);
+
+        URL stylesheetResource = loader.getResource(correctedPath);
+        String loaderName = loader.getClass().getSimpleName();
+
+        if (stylesheetResource == null) {
+            System.err.println("[" + loaderName + "] Stylesheet not found: " + correctedPath);
+            return false;
+        }
+
+        try {
+            scene.getStylesheets().add(stylesheetResource.toExternalForm());
+            System.out.println("[" + loaderName + "] Loaded stylesheet: " + correctedPath);
+            return true;
+        } catch (Exception e) {
+            System.err.println("[" + loaderName + "] Failed to load stylesheet: " + correctedPath + " - " + e.getMessage());
+            return false;
+        }
+    }
+
+
+    @Override
     public ImageView loadIcon(String path) {
-        Image image = new Image(getClass().getResourceAsStream(path), 0, 0, true, true); // load full quality
+        ImageView fallbackIcon = createIconFromPath(Icons.HOUSE, getClass().getClassLoader());
 
-        ImageView icon = new ImageView(image);
-        icon.setFitWidth(16);
-        icon.setFitHeight(16);
-        icon.setPreserveRatio(true);
-        icon.setSmooth(true);
+        if (fallbackIcon == null) {
+            throw new RuntimeException("Fallback icon not found: " + Icons.HOUSE);
+        }
 
-        return icon;
+        ImageView icon = createIconFromPath(path, getClass().getClassLoader());
+
+        if (icon != null) {
+            return icon;
+        }
+
+        for (ClassLoader pluginClassLoader : Core.getInstance().getPluginController().getPluginClassLoaders()) {
+            icon = createIconFromPath(path, pluginClassLoader);
+            if (icon != null) {
+                return icon;
+            }
+        }
+
+        System.err.println("Failed to load icon from all classloaders: " + path);
+
+        return fallbackIcon;
+    }
+
+    private ImageView createIconFromPath(String path, ClassLoader loader) {
+        String correctedPath = correctClassLoaderPath(path);
+
+        try (InputStream iconStream = loader.getResourceAsStream(correctedPath)) {
+            if (iconStream == null) {
+                System.err.println("[" + loader.getClass().getSimpleName() + "] Icon not found: " + correctedPath);
+                return null;
+            }
+
+            Image image = new Image(iconStream, 0, 0, true, true);
+            ImageView view = new ImageView(image);
+            view.setFitWidth(16);
+            view.setFitHeight(16);
+            view.setPreserveRatio(true);
+            view.setSmooth(true);
+
+            System.out.println("[" + loader.getClass().getSimpleName() + "] Loaded icon: " + correctedPath);
+            return view;
+        } catch (Exception e) {
+            System.err.println("[" + loader.getClass().getSimpleName() + "] Error loading icon: " + correctedPath + " - " + e.getMessage());
+            return null;
+        }
     }
 
     @Override
@@ -65,8 +152,6 @@ public class UIController extends Application implements IUIController {
         primaryStage.setTitle("Federal Institute Library Manager");
         primaryStage.setResizable(false);
         primaryStage.setMaximized(false);
-
-        tabContents = new HashMap<>();
 
         MenuBar menuBar = new MenuBar();
 
@@ -88,7 +173,10 @@ public class UIController extends Application implements IUIController {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        scene.getStylesheets().add(getClass().getResource("/css/ui.css").toExternalForm());
+        this.scene = scene;
+
+        loadStylesheet(CSS.SIDEBAR);
+        loadStylesheet(CSS.TABLE_OF_CONTENTS);
 
         createMainTab();
 
@@ -107,48 +195,45 @@ public class UIController extends Application implements IUIController {
     }
 
     @Override
-    public boolean createTab(TabInformation tabInformation, Node contents) {
-        if (contents == null) {
+    public boolean createTab(TabInformation tabInformation, Supplier<Node> contentSupplier) {
+        if (contentSupplier == null) {
             return false;
         }
 
         sidebar.addTab(tabInformation.text(), tabInformation.icon());
-        tabContents.put(tabInformation.text(), contents);
+        lazyTabContents.put(tabInformation.text(), contentSupplier);
 
         return true;
     }
+
 
     private void createMainTab() {
         sidebar.addTab(MAIN_TAB, loadIcon(Icons.HOUSE));
         sidebar.selectTab(MAIN_TAB);
 
         Label title = new Label("Welcome to the library system!");
-        title.setStyle(
-                "-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333333;" +
-                        "-fx-padding: 5px; -fx-border-radius: 5px;" +
-                        "-fx-background-radius: 5px;"
-        );
+        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333333;"
+                + "-fx-padding: 5px; -fx-border-radius: 5px;" + "-fx-background-radius: 5px;");
 
         Label description = new Label(
                 "This is the main tab of the library system. You can access various features from here.");
-        description.setStyle(
-                "-fx-font-size: 16px; -fx-text-fill: #666666; -fx-padding: 5px; " +
-                        "-fx-border-radius: 5px; -fx-background-radius: 5px;"
-        );
+        description.setStyle("-fx-font-size: 16px; -fx-text-fill: #666666; -fx-padding: 5px; "
+                + "-fx-border-radius: 5px; -fx-background-radius: 5px;");
 
         VBox mainTabContent = new VBox();
         mainTabContent.getChildren().addAll(title, description);
 
         centerContent.getChildren().add(mainTabContent);
-        tabContents.put(MAIN_TAB, mainTabContent);
+        lazyTabContents.put(MAIN_TAB, () -> mainTabContent);
     }
 
     private void updateCenterContent(String tabText) {
         centerContent.getChildren().clear();
 
-        Node content = tabContents.get(tabText);
+        Supplier<Node> supplier = lazyTabContents.get(tabText);
 
-        if (content != null) {
+        if (supplier != null) {
+            Node content = supplier.get();
             centerContent.getChildren().add(content);
         } else {
             displayNullAlert();
@@ -167,7 +252,12 @@ public class UIController extends Application implements IUIController {
         centerContent.getChildren().add(warning);
     }
 
+    private String correctClassLoaderPath(String original) {
+        return original.startsWith("/") ? original.substring(1) : original;
+    }
+
     public static UIController getInstance() {
         return uiController;
     }
+
 }
