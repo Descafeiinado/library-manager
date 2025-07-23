@@ -4,6 +4,9 @@ import br.edu.ifba.inf008.core.domain.models.PageRequest;
 import br.edu.ifba.inf008.core.domain.models.PageableResponse;
 import br.edu.ifba.inf008.core.infrastructure.managers.HibernateManager;
 import br.edu.ifba.inf008.core.infrastructure.repositories.Repository;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -29,6 +32,20 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
     }
 
     @Override
+    public Optional<T> findOne(String fieldName, Object value) {
+        try (Session session = HibernateManager.getSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<T> cq = cb.createQuery(entityClass);
+
+            Root<T> root = cq.from(entityClass);
+
+            cq.select(root).where(cb.equal(root.get(fieldName), value));
+
+            return session.createQuery(cq).uniqueResultOptional();
+        }
+    }
+
+    @Override
     public List<T> findAll() {
         try (Session session = HibernateManager.getSession()) {
             return session.createQuery("from " + entityClass.getName(), entityClass).list();
@@ -50,15 +67,22 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
     }
 
     @Override
-    public void save(T entity) {
+    public T save(T entity) {
         Transaction transaction = null;
 
         try (Session session = HibernateManager.getSession()) {
             transaction = session.beginTransaction();
-            session.persist(entity);
+            session.merge(entity);
             transaction.commit();
+
+            return entity;
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            try {
+                if (transaction != null && transaction.isActive()) {
+                    transaction.rollback();
+                }
+            } catch (Exception ignored) {}
+
             throw e;
         }
     }

@@ -47,6 +47,15 @@ public class UIController extends Application implements IUIController {
     }
 
     @Override
+    public Scene getMainScene() {
+        if (scene == null) {
+            throw new IllegalStateException("Main scene is not initialized yet. Call start() first.");
+        }
+
+        return scene;
+    }
+
+    @Override
     public void postPluginInit() {
         if (Core.getInstance().getPluginController().getEnabledPlugins().isEmpty()) {
             displayNullAlert();
@@ -54,8 +63,8 @@ public class UIController extends Application implements IUIController {
     }
 
     @Override
-    public void loadStylesheet(String path) {
-        if (tryLoadStylesheet(path, getClass().getClassLoader())) {
+    public void loadStylesheetToScene(Scene scene, String path) {
+        if (tryLoadStylesheet(scene, path, getClass().getClassLoader())) {
             return;
         }
 
@@ -64,7 +73,7 @@ public class UIController extends Application implements IUIController {
         boolean loadedFromPlugins = false;
 
         for (ClassLoader pluginClassLoader : Core.getInstance().getPluginController().getPluginClassLoaders()) {
-            if (tryLoadStylesheet(path, pluginClassLoader)) {
+            if (tryLoadStylesheet(scene, path, pluginClassLoader)) {
                 loadedFromPlugins = true;
                 break;
             }
@@ -75,7 +84,7 @@ public class UIController extends Application implements IUIController {
         }
     }
 
-    private boolean tryLoadStylesheet(String path, ClassLoader loader) {
+    private boolean tryLoadStylesheet(Scene scene, String path, ClassLoader loader) {
         String correctedPath = correctClassLoaderPath(path);
 
         URL stylesheetResource = loader.getResource(correctedPath);
@@ -96,7 +105,6 @@ public class UIController extends Application implements IUIController {
         }
     }
 
-
     @Override
     public ImageView loadIcon(String path) {
         ImageView fallbackIcon = createIconFromPath(Icons.HOUSE, getClass().getClassLoader());
@@ -113,7 +121,9 @@ public class UIController extends Application implements IUIController {
 
         for (ClassLoader pluginClassLoader : Core.getInstance().getPluginController().getPluginClassLoaders()) {
             icon = createIconFromPath(path, pluginClassLoader);
+
             if (icon != null) {
+                System.out.println("Loaded icon from plugin classloader: " + pluginClassLoader.getClass().getSimpleName());
                 return icon;
             }
         }
@@ -175,8 +185,8 @@ public class UIController extends Application implements IUIController {
 
         this.scene = scene;
 
-        loadStylesheet(CSS.SIDEBAR);
-        loadStylesheet(CSS.TABLE_OF_CONTENTS);
+        loadStylesheetToScene(this.scene, CSS.SIDEBAR);
+        loadStylesheetToScene(this.scene, CSS.TABLE_OF_CONTENTS);
 
         createMainTab();
 

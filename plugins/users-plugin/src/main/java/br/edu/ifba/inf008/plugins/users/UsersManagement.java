@@ -14,6 +14,9 @@ import br.edu.ifba.inf008.plugins.users.domain.entities.User;
 import br.edu.ifba.inf008.plugins.users.infrastructure.repositories.UserRepository;
 import br.edu.ifba.inf008.plugins.users.ui.CSS;
 import br.edu.ifba.inf008.plugins.users.ui.PluginIcons;
+import br.edu.ifba.inf008.plugins.users.ui.views.CreateUserDialog;
+import br.edu.ifba.inf008.plugins.users.ui.views.DeleteUserDialog;
+import br.edu.ifba.inf008.plugins.users.ui.views.EditUserDialog;
 import java.util.List;
 import java.util.function.Predicate;
 import javafx.geometry.Pos;
@@ -34,7 +37,7 @@ public class UsersManagement implements IPlugin {
         ICore core = ICore.getInstance();
 
         uiController = core.getUIController();
-        uiController.loadStylesheet(CSS.USERS_MANAGEMENT);
+        uiController.loadStylesheetToScene(uiController.getMainScene(), CSS.USERS_MANAGEMENT);
 
         uiController.createTab(new TabInformation("Users", uiController.loadIcon(PluginIcons.USERS)),
                 this::createMainContent);
@@ -51,10 +54,9 @@ public class UsersManagement implements IPlugin {
         Label titleLabel = new Label("Users");
         titleLabel.getStyleClass().add("um-title-label");
 
-        Button createButton = new Button("New");
+        Button createButton = new Button("New User");
         createButton.getStyleClass().add("um-icon-button");
         createButton.setGraphic(uiController.loadIcon(Icons.PLUS));
-        createButton.setOnAction(e -> System.out.println("Create new user"));
 
         Region spacer = new Region();
 
@@ -74,11 +76,14 @@ public class UsersManagement implements IPlugin {
                     }
 
                     public String getIconPath() {
-                        return "/icons/edit.png";
+                        return PluginIcons.EDIT;
                     }
 
                     public void onAction(User user) {
-                        System.out.println("Editing " + user.getName());
+                        EditUserDialog editUserDialog = new EditUserDialog(user);
+
+                        editUserDialog.setOnUserEdited(tableOfContents::reload);
+                        editUserDialog.showAndWait();
                     }
 
                     public Predicate<User> getCondition() {
@@ -91,11 +96,14 @@ public class UsersManagement implements IPlugin {
                     }
 
                     public String getIconPath() {
-                        return "/icons/delete.png";
+                        return PluginIcons.DELETE;
                     }
 
                     public void onAction(User user) {
-                        System.out.println("Deleting " + user.getName());
+                        DeleteUserDialog deleteUserDialog = new DeleteUserDialog(user);
+
+                        deleteUserDialog.setOnUserDeleted((_) -> tableOfContents.reload());
+                        deleteUserDialog.showAndWait();
                     }
 
                     public Predicate<User> getCondition() {
@@ -103,6 +111,14 @@ public class UsersManagement implements IPlugin {
                     }
                 }
         ));
+
+        createButton.setOnAction(e -> {
+            CreateUserDialog createUserDialog = new CreateUserDialog();
+
+            createUserDialog.setOnUserCreated(_ -> tableOfContents.reload());
+
+            createUserDialog.showAndWait();
+        });
 
         mainContent.getChildren().addAll(header, tableOfContents);
 

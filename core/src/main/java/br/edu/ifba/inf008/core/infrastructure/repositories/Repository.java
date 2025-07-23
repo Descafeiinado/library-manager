@@ -7,8 +7,9 @@ import java.util.Optional;
 
 public interface Repository<T, ID> {
     Optional<T> findById(ID id);
+    Optional<T> findOne(String fieldName, Object value);
     List<T> findAll();
     PageableResponse<T> findAll(PageRequest pageRequest);
-    void save(T entity);
+    T save(T entity);
     void delete(T entity);
 }

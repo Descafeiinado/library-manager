@@ -1,6 +1,8 @@
 package br.edu.ifba.inf008.plugins.users.domain.entities;
 
 import br.edu.ifba.inf008.core.ui.annotations.TableIgnore;
+import br.edu.ifba.inf008.core.ui.annotations.TableLabel;
+import br.edu.ifba.inf008.core.ui.annotations.TableColumnSize;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -10,16 +12,22 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    @TableLabel("#")
+    @TableColumnSize(50)
+    private Long userId;
 
     @Column(nullable = false)
+    @TableColumnSize(250)
     private String name;
 
     @Column(nullable = false, unique = true)
+    @TableLabel("E-mail")
+    @TableColumnSize(250)
     private String email;
 
     @Column(name = "registered_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime registeredAt;
+    @TableLabel("Registered At")
+    private LocalDateTime registeredAt = LocalDateTime.now();
 
     @Column(name = "deactivated_at")
     @TableIgnore
@@ -28,18 +36,18 @@ public class User {
     public User() {
     }
 
-    public User(int userId, String name, String email, LocalDateTime registeredAt) {
+    public User(Long userId, String name, String email, LocalDateTime registeredAt) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.registeredAt = registeredAt;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -73,6 +81,17 @@ public class User {
 
     public void setDeactivatedAt(LocalDateTime deactivatedAt) {
         this.deactivatedAt = deactivatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", registeredAt=" + registeredAt +
+                ", deactivatedAt=" + deactivatedAt +
+                '}';
     }
 
 }
