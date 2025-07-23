@@ -12,6 +12,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", nullable = false, unique = true)
     @TableLabel("#")
     @TableColumnSize(50)
     private Long userId;
@@ -26,7 +27,7 @@ public class User {
     private String email;
 
     @Column(name = "registered_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @TableLabel("Registered At")
+    @TableIgnore
     private LocalDateTime registeredAt = LocalDateTime.now();
 
     @Column(name = "deactivated_at")

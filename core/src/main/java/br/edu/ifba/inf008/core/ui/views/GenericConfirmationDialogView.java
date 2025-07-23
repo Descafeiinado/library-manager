@@ -32,10 +32,10 @@ public class GenericConfirmationDialogView extends Stage {
         formLayout.setPrefWidth(350);
 
         Label titleLabel = new Label(title);
-        titleLabel.getStyleClass().add("um-confirmation-form-title");
+        titleLabel.getStyleClass().add("confirmation-form-title");
 
         Label messageLabel = new Label(message);
-        messageLabel.getStyleClass().add("um-confirmation-message-label");
+        messageLabel.getStyleClass().add("confirmation-message-label");
 
         Button cancelButton = new Button("Cancel");
         Button confirmButton = new Button("Confirm");
@@ -43,8 +43,8 @@ public class GenericConfirmationDialogView extends Stage {
         HBox buttonRow = new HBox(10, cancelButton, confirmButton);
         buttonRow.setAlignment(Pos.CENTER_RIGHT);
 
-        cancelButton.getStyleClass().add("um-confirmation-cancel-button");
-        confirmButton.getStyleClass().add("um-confirmation-confirm-button");
+        cancelButton.getStyleClass().add("confirmation-cancel-button");
+        confirmButton.getStyleClass().add("confirmation-confirm-button");
 
         cancelButton.setOnAction(e -> close());
 

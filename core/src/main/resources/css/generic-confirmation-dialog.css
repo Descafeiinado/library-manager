@@ -2,25 +2,23 @@
     -fx-background-color: #ffffff;
     -fx-border-color: #e0e0e0;
     -fx-border-width: 1;
-    -fx-border-radius: 8;
     -fx-background-radius: 8;
     -fx-padding: 20;
     -fx-spacing: 15;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0.1, 0, 4);
 }
 
-.um-confirmation-form-title {
+.confirmation-form-title {
     -fx-font-size: 20px;
     -fx-font-weight: 600;
     -fx-text-fill: #2c3e50;
-    -fx-padding: 0 0 8 0;
+    -fx-padding: 0 0 5 0;
 }
 
-.um-confirmation-message-label {
+.confirmation-message-label {
     -fx-font-size: 14.5px;
     -fx-text-fill: #555;
     -fx-wrap-text: true;
-    -fx-line-spacing: 2;
 }
 
 .button {
@@ -34,17 +32,17 @@
     -fx-transition: all 0.2s ease-in-out;
 }
 
-.um-confirmation-cancel-button {
+.confirmation-cancel-button {
     -fx-background-color: #e74c3c;
 }
-.um-confirmation-cancel-button:hover {
+.confirmation-cancel-button:hover {
     -fx-background-color: #c0392b;
 }
 
-.um-confirmation-confirm-button {
+.confirmation-confirm-button {
     -fx-background-color: #2ecc71;
 }
-.um-confirmation-confirm-button:hover {
+.confirmation-confirm-button:hover {
     -fx-background-color: #27ae60;
 }
 

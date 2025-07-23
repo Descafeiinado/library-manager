@@ -17,6 +17,7 @@ import br.edu.ifba.inf008.plugins.users.ui.PluginIcons;
 import br.edu.ifba.inf008.plugins.users.ui.views.CreateUserDialog;
 import br.edu.ifba.inf008.plugins.users.ui.views.DeleteUserDialog;
 import br.edu.ifba.inf008.plugins.users.ui.views.EditUserDialog;
+import br.edu.ifba.inf008.plugins.users.ui.views.ViewUserDialog;
 import java.util.List;
 import java.util.function.Predicate;
 import javafx.geometry.Pos;
@@ -39,7 +40,8 @@ public class UsersManagement implements IPlugin {
         uiController = core.getUIController();
         uiController.loadStylesheetToScene(uiController.getMainScene(), CSS.USERS_MANAGEMENT);
 
-        uiController.createTab(new TabInformation("Users", uiController.loadIcon(PluginIcons.USERS)),
+        uiController.createTab(
+                new TabInformation("Users", uiController.loadIcon(PluginIcons.USERS)),
                 this::createMainContent);
 
         HibernateManager.registerEntityClass(User.class);
@@ -69,7 +71,26 @@ public class UsersManagement implements IPlugin {
         TableOfContents<User> tableOfContents = new TableOfContents<>(User.class,
                 (page, size) -> UserRepository.getInstance().findAll(PageRequest.of(page, size)));
 
-        tableOfContents.addActionColumn(List.of(
+        tableOfContents.addActionColumn(List.of(new TableAction<>() {
+                    public String getLabel() {
+                        return "View";
+                    }
+
+                    public String getIconPath() {
+                        return PluginIcons.VIEW;
+                    }
+
+                    public void onAction(User user) {
+                        ViewUserDialog viewUserDialog = new ViewUserDialog(user);
+
+                        viewUserDialog.showAndWait();
+                    }
+
+                    public Predicate<User> getCondition() {
+                        return (user) -> user.getDeactivatedAt() == null;
+                    }
+                },
+
                 new TableAction<>() {
                     public String getLabel() {
                         return "Edit";
@@ -89,8 +110,7 @@ public class UsersManagement implements IPlugin {
                     public Predicate<User> getCondition() {
                         return (_) -> true;
                     }
-                },
-                new TableAction<>() {
+                }, new TableAction<>() {
                     public String getLabel() {
                         return "Delete";
                     }
@@ -109,8 +129,7 @@ public class UsersManagement implements IPlugin {
                     public Predicate<User> getCondition() {
                         return (user) -> user.getDeactivatedAt() == null;
                     }
-                }
-        ));
+                }));
 
         createButton.setOnAction(e -> {
             CreateUserDialog createUserDialog = new CreateUserDialog();
