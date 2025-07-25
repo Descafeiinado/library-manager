@@ -41,11 +41,13 @@ public class EditUserDialog extends Stage {
         initStyle(StageStyle.UTILITY);
 
         VBox formLayout = new VBox(15);
+
         formLayout.setPadding(new Insets(20));
         formLayout.setPrefWidth(350);
         formLayout.getStyleClass().add("um-form-container");
 
         Label titleLabel = new Label("Editing: " + user.getName());
+        titleLabel.setStyle("-fx-padding: 0 0 12 0;");
         titleLabel.setWrapText(true);
         titleLabel.getStyleClass().add("um-form-title");
 
@@ -143,7 +145,14 @@ public class EditUserDialog extends Stage {
     private VBox createLabeledField(String labelText, TextField field, Label errorLabel) {
         Label label = new Label(labelText);
         errorLabel.setWrapText(true);
-        return new VBox(4, label, field, errorLabel);
+
+        VBox box = new VBox(label, field, errorLabel);
+        box.setSpacing(1);
+        box.setPadding(new Insets(0, 0, 6, 0));
+
+        box.getStyleClass().add("um-labeled-field");
+
+        return box;
     }
 
     private void clearErrors() {

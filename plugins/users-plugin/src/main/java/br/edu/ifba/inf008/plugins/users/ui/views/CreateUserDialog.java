@@ -47,6 +47,7 @@ public class CreateUserDialog extends Stage {
 
         Label titleLabel = new Label("New User");
         titleLabel.getStyleClass().add("um-form-title");
+        titleLabel.setStyle("-fx-padding: 0 0 12 0;");
 
         nameField.setPromptText("Full name");
         emailField.setPromptText("Email address");
@@ -136,7 +137,14 @@ public class CreateUserDialog extends Stage {
     private VBox createLabeledField(String labelText, TextField field, Label errorLabel) {
         Label label = new Label(labelText);
         errorLabel.setWrapText(true);
-        return new VBox(4, label, field, errorLabel);
+
+        VBox box = new VBox(label, field, errorLabel);
+        box.setSpacing(1);
+        box.setPadding(new Insets(0, 0, 6, 0));
+
+        box.getStyleClass().add("um-labeled-field");
+
+        return box;
     }
 
     private void clearErrors() {
