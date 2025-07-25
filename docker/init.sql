@@ -8,7 +8,8 @@ CREATE TABLE users
     user_id       INT AUTO_INCREMENT PRIMARY KEY,
     name          VARCHAR(100)        NOT NULL,
     email         VARCHAR(100) UNIQUE NOT NULL,
-    registered_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    registered_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    deactivated_at DATETIME DEFAULT NULL,
 );
 
 CREATE TABLE books

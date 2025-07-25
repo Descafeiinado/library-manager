@@ -10,6 +10,7 @@ public interface Repository<T, ID> {
     Optional<T> findOne(String fieldName, Object value);
     List<T> findAll();
     PageableResponse<T> findAll(PageRequest pageRequest);
+    PageableResponse<T> findAll(PageRequest pageRequest, String fieldName, Object value);
     T save(T entity);
     void delete(T entity);
 }

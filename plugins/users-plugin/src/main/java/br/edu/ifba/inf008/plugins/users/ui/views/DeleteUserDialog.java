@@ -16,7 +16,7 @@ public class DeleteUserDialog extends GenericConfirmationDialogView {
 
         setOnConfirmedClick(() -> {
             try {
-                userService.delete(user);
+                userService.delete(user.getUserId());
 
                 if (onUserDeleted != null) {
                     onUserDeleted.accept(user);

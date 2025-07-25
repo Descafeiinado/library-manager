@@ -26,6 +26,8 @@ public class PluginController implements IPluginController {
         return enabledPlugins.contains(pluginName);
     }
 
+    // TODO: dependency tree for plugins (plugin depends on other plugins)
+
     public void init() {
         try {
             File pluginsDir = new File("./plugins");

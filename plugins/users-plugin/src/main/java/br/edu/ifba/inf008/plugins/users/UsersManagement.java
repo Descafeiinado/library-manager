@@ -4,20 +4,20 @@ import br.edu.ifba.inf008.core.ICore;
 import br.edu.ifba.inf008.core.IPlugin;
 import br.edu.ifba.inf008.core.IUIController;
 import br.edu.ifba.inf008.core.domain.annotations.Plugin;
-import br.edu.ifba.inf008.core.domain.models.PageRequest;
 import br.edu.ifba.inf008.core.infrastructure.managers.HibernateManager;
 import br.edu.ifba.inf008.core.ui.Icons;
 import br.edu.ifba.inf008.core.ui.components.TableOfContents;
 import br.edu.ifba.inf008.core.ui.models.TabInformation;
 import br.edu.ifba.inf008.core.ui.models.TableAction;
 import br.edu.ifba.inf008.plugins.users.domain.entities.User;
-import br.edu.ifba.inf008.plugins.users.infrastructure.repositories.UserRepository;
+import br.edu.ifba.inf008.plugins.users.infrastructure.services.UserService;
 import br.edu.ifba.inf008.plugins.users.ui.CSS;
 import br.edu.ifba.inf008.plugins.users.ui.PluginIcons;
 import br.edu.ifba.inf008.plugins.users.ui.views.CreateUserDialog;
 import br.edu.ifba.inf008.plugins.users.ui.views.DeleteUserDialog;
 import br.edu.ifba.inf008.plugins.users.ui.views.EditUserDialog;
 import br.edu.ifba.inf008.plugins.users.ui.views.ViewUserDialog;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import javafx.geometry.Pos;
@@ -32,6 +32,7 @@ import javafx.scene.layout.VBox;
 public class UsersManagement implements IPlugin {
 
     private IUIController uiController;
+    private UserService userService;
 
     @Override
     public boolean init() {
@@ -45,6 +46,8 @@ public class UsersManagement implements IPlugin {
                 this::createMainContent);
 
         HibernateManager.registerEntityClass(User.class);
+
+        userService = UserService.getInstance();
 
         return true;
     }
@@ -69,27 +72,31 @@ public class UsersManagement implements IPlugin {
         header.getStyleClass().add("um-header");
 
         TableOfContents<User> tableOfContents = new TableOfContents<>(User.class,
-                (page, size) -> UserRepository.getInstance().findAll(PageRequest.of(page, size)));
+                (page, size) -> {
+            System.out.println("Loading users: page " + page + ", size " + size + "." + Arrays.toString(
+                    userService.findAll(page, size).getContent().toArray()));
+                    return userService.findAll(page, size);
+                });
 
         tableOfContents.addActionColumn(List.of(new TableAction<>() {
-                    public String getLabel() {
-                        return "View";
-                    }
+                                                    public String getLabel() {
+                                                        return "View";
+                                                    }
 
-                    public String getIconPath() {
-                        return PluginIcons.VIEW;
-                    }
+                                                    public String getIconPath() {
+                                                        return PluginIcons.VIEW;
+                                                    }
 
-                    public void onAction(User user) {
-                        ViewUserDialog viewUserDialog = new ViewUserDialog(user);
+                                                    public void onAction(User user) {
+                                                        ViewUserDialog viewUserDialog = new ViewUserDialog(user);
 
-                        viewUserDialog.showAndWait();
-                    }
+                                                        viewUserDialog.showAndWait();
+                                                    }
 
-                    public Predicate<User> getCondition() {
-                        return (user) -> user.getDeactivatedAt() == null;
-                    }
-                },
+                                                    public Predicate<User> getCondition() {
+                                                        return (user) -> user.getDeactivatedAt() == null;
+                                                    }
+                                                },
 
                 new TableAction<>() {
                     public String getLabel() {

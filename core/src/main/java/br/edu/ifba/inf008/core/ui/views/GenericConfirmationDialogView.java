@@ -55,14 +55,12 @@ public class GenericConfirmationDialogView extends Stage {
             close();
         });
 
-        // 💡 Adicione os elementos ao layout aqui!
         formLayout.getChildren().addAll(titleLabel, messageLabel, buttonRow);
 
         Scene scene = new Scene(formLayout);
         uiController.loadStylesheetToScene(scene, CSS.GENERIC_CONFIRMATION_DIALOG);
         setScene(scene);
     }
-
 
     public void setOnConfirmedClick(Runnable onConfirmedClick) {
         this.onConfirmedClick = onConfirmedClick;

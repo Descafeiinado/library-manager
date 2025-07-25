@@ -6,13 +6,13 @@ import br.edu.ifba.inf008.core.infrastructure.managers.HibernateManager;
 import br.edu.ifba.inf008.core.infrastructure.repositories.Repository;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class HibernateRepository<T, ID extends Serializable> implements Repository<T, ID> {
 
@@ -57,12 +57,42 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
         try (Session session = HibernateManager.getSession()) {
             List<T> content = session.createQuery("from " + entityClass.getName(), entityClass)
                     .setFirstResult(pageRequest.page() * pageRequest.limit())
-                    .setMaxResults(pageRequest.limit())
-                    .list();
+                    .setMaxResults(pageRequest.limit()).list();
 
-            long totalElements = (long) session.createQuery("select count(*) from " + entityClass.getName()).uniqueResult();
+            long totalElements = (long) session.createQuery(
+                    "select count(*) from " + entityClass.getName()).uniqueResult();
 
-            return new PageableResponse<>(pageRequest.page(), pageRequest.limit(), totalElements, content);
+            return new PageableResponse<>(pageRequest.page(), pageRequest.limit(), totalElements,
+                    content);
+        }
+    }
+
+    @Override
+    public PageableResponse<T> findAll(PageRequest pageRequest, String fieldName, Object value) {
+        try (Session session = HibernateManager.getSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<T> cq = cb.createQuery(entityClass);
+
+            Root<T> root = cq.from(entityClass);
+
+            Predicate predicate = cb.equal(root.get(fieldName), value);
+
+            if (value == null) {
+                predicate = cb.isNull(root.get(fieldName));
+            }
+
+            cq.select(root).where(predicate);
+
+            List<T> content = session.createQuery(cq)
+                    .setFirstResult(pageRequest.page() * pageRequest.limit())
+                    .setMaxResults(pageRequest.limit()).list();
+
+            long totalElements = (long) session.createQuery(
+                    "select count(*) from " + entityClass.getName() + " where " + fieldName
+                            + " = :value").setParameter("value", value).uniqueResult();
+
+            return new PageableResponse<>(pageRequest.page(), pageRequest.limit(), totalElements,
+                    content);
         }
     }
 
@@ -72,16 +102,17 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
 
         try (Session session = HibernateManager.getSession()) {
             transaction = session.beginTransaction();
-            session.merge(entity);
+            T newEntity = session.merge(entity);
             transaction.commit();
 
-            return entity;
+            return newEntity;
         } catch (Exception e) {
             try {
                 if (transaction != null && transaction.isActive()) {
                     transaction.rollback();
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
 
             throw e;
         }
@@ -96,7 +127,9 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
             session.remove(entity);
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             throw e;
         }
     }

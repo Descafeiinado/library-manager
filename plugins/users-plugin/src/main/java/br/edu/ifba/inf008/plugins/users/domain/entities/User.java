@@ -30,7 +30,7 @@ public class User {
     @TableIgnore
     private LocalDateTime registeredAt = LocalDateTime.now();
 
-    @Column(name = "deactivated_at")
+    @Column(name = "deactivated_at", columnDefinition = "TIMESTAMP DEFAULT NULL")
     @TableIgnore
     private LocalDateTime deactivatedAt;
 
@@ -82,6 +82,10 @@ public class User {
 
     public void setDeactivatedAt(LocalDateTime deactivatedAt) {
         this.deactivatedAt = deactivatedAt;
+    }
+
+    public boolean isActive() {
+        return deactivatedAt == null;
     }
 
     @Override
