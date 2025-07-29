@@ -81,6 +81,31 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
     }
 
     /**
+     * Finds all entities with a specific field value.
+     * @param fieldName the name of the field to search by
+     * @param value the value of the field to search for
+     * @return a list of entities matching the criteria
+     */
+    @Override
+    public List<T> findAll(String fieldName, Object value) {
+        try (Session session = getSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<T> cq = cb.createQuery(entityClass);
+
+            Root<T> root = cq.from(entityClass);
+
+            Predicate predicate = cb.equal(root.get(fieldName), value);
+            if (value == null) {
+                predicate = cb.isNull(root.get(fieldName));
+            }
+
+            cq.select(root).where(predicate);
+
+            return session.createQuery(cq).list();
+        }
+    }
+
+    /**
      * Finds all entities with pagination support.
      * @param pageRequest the pagination request containing page number and size
      * @return a pageable response containing the entities

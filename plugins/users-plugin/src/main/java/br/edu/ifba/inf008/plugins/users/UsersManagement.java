@@ -15,18 +15,22 @@ import br.edu.ifba.inf008.plugins.users.ui.views.MainView;
 @Plugin(name = "users-management")
 public class UsersManagement implements IPlugin {
 
-    private IUIController uiController;
     private UserService userService;
 
     @Override
     public boolean init() {
-        ICore core = ICore.getInstance();
-
         HibernateManager.registerEntityClass(User.class);
 
         userService = UserService.getInstance();
 
-        uiController = core.getUIController();
+        return true;
+    }
+
+    @Override
+    public boolean postInit() {
+        ICore core = ICore.getInstance();
+        IUIController uiController = core.getUIController();
+
         uiController.loadStylesheetToScene(uiController.getMainScene(), CSS.USERS_MANAGEMENT);
 
         uiController.createTab(
@@ -35,5 +39,4 @@ public class UsersManagement implements IPlugin {
 
         return true;
     }
-
 }

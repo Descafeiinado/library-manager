@@ -21,12 +21,12 @@ public class BookAvailabilityManager {
         this.provider = provider;
     }
 
-    public Integer getAvailableCopies(Long bookId) {
+    public Long getAvailableCopies(Long bookId) {
         return provider.provideAvailableCopies(bookId);
     }
 
     public boolean isBookAvailable(Long bookId) {
-        Integer availableCopies = getAvailableCopies(bookId);
+        Long availableCopies = getAvailableCopies(bookId);
 
         return availableCopies != null && availableCopies > 0;
     }

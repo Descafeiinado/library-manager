@@ -15,25 +15,28 @@ import br.edu.ifba.inf008.plugins.books.ui.views.MainView;
 @Plugin(name = "book-management")
 public class BookManagement implements IPlugin {
 
-    private IUIController uiController;
     private BookService bookService;
 
     @Override
     public boolean init() {
-        ICore core = ICore.getInstance();
 
         HibernateManager.registerEntityClass(Book.class);
 
         bookService = BookService.getInstance();
 
-        uiController = core.getUIController();
-        uiController.loadStylesheetToScene(uiController.getMainScene(), CSS.BOOKS_MANAGEMENT);
+        return true;
+    }
 
+    @Override
+    public boolean postInit() {
+        ICore core = ICore.getInstance();
+        IUIController uiController = core.getUIController();
+
+        uiController.loadStylesheetToScene(uiController.getMainScene(), CSS.BOOKS_MANAGEMENT);
         uiController.createTab(
                 new TabInformation("Books", uiController.loadIcon(PluginIcons.BOOKS)),
                 MainView.supply(uiController, bookService));
 
         return true;
     }
-
 }

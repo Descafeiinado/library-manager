@@ -11,11 +11,15 @@ import br.edu.ifba.inf008.plugins.users.ui.CSS;
 import jakarta.validation.ConstraintViolationException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -163,16 +167,27 @@ public class EditUserDialog extends Stage {
      * @param errorLabel  the label to display validation errors
      * @return a VBox containing the label, text field, and error label
      */
-    private VBox createLabeledField(String labelText, TextField field, Label errorLabel) {
+    private VBox createLabeledField(String labelText, Node field, Label errorLabel) {
         Label label = new Label(labelText);
+
         errorLabel.setWrapText(true);
+        errorLabel.setTextOverrun(OverrunStyle.CLIP);
+
+        errorLabel.setMaxWidth(350);
+        errorLabel.setPrefWidth(350);
+        errorLabel.setMinWidth(Region.USE_PREF_SIZE);
+        errorLabel.setMaxHeight(Double.MAX_VALUE);
+        errorLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        errorLabel.setMinHeight(Region.USE_PREF_SIZE);
 
         VBox box = new VBox(label, field, errorLabel);
         box.setSpacing(1);
         box.setPadding(new Insets(0, 0, 6, 0));
-
         box.getStyleClass().add("um-labeled-field");
 
+        box.setMaxWidth(Double.MAX_VALUE);
+
+        VBox.setVgrow(errorLabel, Priority.NEVER);
         return box;
     }
 

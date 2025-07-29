@@ -12,6 +12,7 @@
         <module>core</module>
         <module>app</module>
         <module>plugins/books-plugin</module>
+        <module>plugins/loans-plugin</module>
         <module>plugins/users-plugin</module>
     </modules>
 

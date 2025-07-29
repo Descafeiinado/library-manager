@@ -2,35 +2,37 @@ package br.edu.ifba.inf008.plugins.books.ui.views;
 
 import br.edu.ifba.inf008.core.ICore;
 import br.edu.ifba.inf008.core.IUIController;
+import br.edu.ifba.inf008.plugins.books.application.services.BookService;
 import br.edu.ifba.inf008.plugins.books.domain.entities.Book;
 import br.edu.ifba.inf008.plugins.books.domain.exceptions.BookNotFoundException;
 import br.edu.ifba.inf008.plugins.books.domain.exceptions.BookWithLockedCopiesException;
 import br.edu.ifba.inf008.plugins.books.domain.exceptions.IsbnAlreadyExistingException;
 import br.edu.ifba.inf008.plugins.books.infrastructure.models.request.EditBookRequest;
-import br.edu.ifba.inf008.plugins.books.application.services.BookService;
 import br.edu.ifba.inf008.plugins.books.ui.CSS;
 import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDate;
+import java.util.function.Consumer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.time.LocalDate;
-import java.util.function.Consumer;
-
 /**
- * Dialog for editing an existing book.
- * Allows modification of ISBN, title, author, published year, and copies available,
- * with validation and error display.
+ * Dialog for editing an existing book. Allows modification of ISBN, title, author, published year,
+ * and copies available, with validation and error display.
  */
 public class EditBookDialog extends Stage {
 
@@ -94,7 +96,9 @@ public class EditBookDialog extends Stage {
 
         VBox formLayout = new VBox(15);
         formLayout.setPadding(new Insets(20));
-        formLayout.setPrefWidth(350);
+        formLayout.setPrefWidth(400);
+        formLayout.setMaxWidth(400);
+        formLayout.setMinWidth(400);
         formLayout.getStyleClass().add("bm-form-container");
 
         Label titleLabel = new Label("Editing: " + book.getTitle());
@@ -143,7 +147,8 @@ public class EditBookDialog extends Stage {
             }
 
             try {
-                EditBookRequest request = new EditBookRequest(book.getIsbn(), title, author, publishedYear, copies);
+                EditBookRequest request = new EditBookRequest(book.getIsbn(), title, author,
+                        publishedYear, copies);
 
                 Book editedBook = BOOK_SERVICE.edit(book.getBookId(), request);
 
@@ -153,7 +158,8 @@ public class EditBookDialog extends Stage {
 
                 close();
             } catch (BookWithLockedCopiesException ex) {
-                copiesAvailableErrorLabel.setText("The book has locked copies and it's total copies cannot be edited to less than the locked copies.");
+                copiesAvailableErrorLabel.setText(
+                        "The book has locked copies and it's total copies cannot be decreased.");
                 copiesAvailableField.getStyleClass().add("bm-field-error");
             } catch (IsbnAlreadyExistingException ex) {
                 // Should not happen since ISBN is not editable
@@ -212,13 +218,27 @@ public class EditBookDialog extends Stage {
         this.onBookEdited = onBookEdited;
     }
 
-    private VBox createLabeledField(String labelText, javafx.scene.Node field, Label errorLabel) {
+    private VBox createLabeledField(String labelText, Node field, Label errorLabel) {
         Label label = new Label(labelText);
+
         errorLabel.setWrapText(true);
+        errorLabel.setTextOverrun(OverrunStyle.CLIP);
+
+        errorLabel.setMaxWidth(350);
+        errorLabel.setPrefWidth(350);
+        errorLabel.setMinWidth(Region.USE_PREF_SIZE);
+        errorLabel.setMaxHeight(Double.MAX_VALUE);
+        errorLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        errorLabel.setMinHeight(Region.USE_PREF_SIZE);
+
         VBox box = new VBox(label, field, errorLabel);
         box.setSpacing(1);
         box.setPadding(new Insets(0, 0, 6, 0));
         box.getStyleClass().add("bm-labeled-field");
+
+        box.setMaxWidth(Double.MAX_VALUE);
+
+        VBox.setVgrow(errorLabel, Priority.NEVER);
         return box;
     }
 

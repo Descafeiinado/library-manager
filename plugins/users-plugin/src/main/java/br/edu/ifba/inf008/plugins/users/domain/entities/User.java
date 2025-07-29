@@ -1,5 +1,6 @@
 package br.edu.ifba.inf008.plugins.users.domain.entities;
 
+import br.edu.ifba.inf008.core.domain.interfaces.Nameable;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableColumnSize;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableIgnore;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableLabel;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Nameable {
 
     /**
      * Represents a user in the system.
@@ -61,10 +62,12 @@ public class User {
         this.userId = userId;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }

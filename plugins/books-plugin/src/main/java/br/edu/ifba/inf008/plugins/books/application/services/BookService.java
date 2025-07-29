@@ -115,7 +115,7 @@ public class BookService {
                 .orElseThrow(() -> new BookNotFoundException(bookId));
 
         ensureIsbnIsUnique(isbn, existingBook.getBookId());
-        ensureBookIsNotLocked(existingBook, existingBook.getCopiesAvailable());
+        ensureBookIsNotLocked(existingBook, copiesAvailable);
 
         existingBook.setTitle(title);
         existingBook.setAuthor(author);
@@ -152,14 +152,24 @@ public class BookService {
         }
     }
 
-    private void ensureBookIsNotLocked(Book book, Integer totalCopiesAvailable)
+    /**
+     * Ensures that the book is not locked by checking if the number of available copies is less than
+     * the requested new total copies available.
+     *
+     * @param book                  the book to check
+     * @param newTotalCopiesAvailable the new total copies available to set
+     * @throws BookWithLockedCopiesException if the book has locked copies that prevent the update
+     */
+    private void ensureBookIsNotLocked(Book book, Integer newTotalCopiesAvailable)
             throws BookWithLockedCopiesException {
-        Integer effectiveAvailableCopies = bookAvailabilityManager.getAvailableCopies(
-                book.getBookId());
+        Long availableCopies = bookAvailabilityManager.getAvailableCopies(book.getBookId());
+        int currentTotal = book.getCopiesAvailable();
 
-        if (totalCopiesAvailable < effectiveAvailableCopies) {
+        Long lockedCopies = currentTotal - availableCopies;
+
+        if (newTotalCopiesAvailable < lockedCopies) {
             throw new BookWithLockedCopiesException(book.getBookId(),
-                    totalCopiesAvailable - effectiveAvailableCopies);
+                    newTotalCopiesAvailable - lockedCopies);
         }
     }
 

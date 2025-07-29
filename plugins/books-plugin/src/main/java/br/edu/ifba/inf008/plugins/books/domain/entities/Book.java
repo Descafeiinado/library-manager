@@ -1,5 +1,6 @@
 package br.edu.ifba.inf008.plugins.books.domain.entities;
 
+import br.edu.ifba.inf008.core.domain.interfaces.Nameable;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableColumnSize;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableIgnore;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableLabel;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "books")
-public class Book {
+public class Book implements Nameable {
 
     /**
      * Represents a book in the system.
@@ -55,7 +56,8 @@ public class Book {
     public Book() {
     }
 
-    public Book(String title, String author, String isbn, Integer publishedYear, Integer copiesAvailable) {
+    public Book(String title, String author, String isbn, Integer publishedYear,
+            Integer copiesAvailable) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
@@ -121,6 +123,16 @@ public class Book {
 
     public boolean isActive() {
         return deactivatedAt == null;
+    }
+
+    @Override
+    public String getName() {
+        return title;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.title = name;
     }
 
     @Override

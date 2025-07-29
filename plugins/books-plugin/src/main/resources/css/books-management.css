@@ -44,6 +44,7 @@
 .bm-labeled-field {
     -fx-spacing: 2;
     -fx-padding: 0 0 6 0;
+    -fx-max-width: 320px;
 }
 
 .bm-text-field {
@@ -74,6 +75,8 @@
 .bm-error-label {
     -fx-text-fill: #e74c3c;
     -fx-font-size: 11px;
+    -fx-max-width: 300px;
+    -fx-wrap-text: true;
 }
 
 .bm-field-error {

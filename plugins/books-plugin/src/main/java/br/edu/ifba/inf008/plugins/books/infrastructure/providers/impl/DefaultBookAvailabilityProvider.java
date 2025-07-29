@@ -13,10 +13,11 @@ public class DefaultBookAvailabilityProvider implements BookAvailabilityProvider
     }
 
     @Override
-    public Integer provideAvailableCopies(Long bookId) {
+    public Long provideAvailableCopies(Long bookId) {
         return bookRepository.findById(bookId)
                 .map(Book::getCopiesAvailable)
-                .orElse(0);
+                .map(Integer::longValue)
+                .orElse(0L);
     }
 
 }

@@ -28,7 +28,7 @@ import javafx.stage.Stage;
 
 public class UIController extends Application implements IUIController {
 
-    private static final String MAIN_TAB = "Homepage";
+    private static final String MAIN_TAB = "Home";
     private static UIController uiController = new UIController();
 
     private final Map<String, Supplier<Node>> lazyTabContents = new HashMap<>();

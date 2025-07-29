@@ -43,6 +43,7 @@ VALUES ('The Great Gatsby', 'F. Scott Fitzgerald', '9780743273565', 1925, 3),
        ('To Kill a Mockingbird', 'Harper Lee', '9780061120084', 1960, 2);
 
 INSERT INTO loans (user_id, book_id, loan_date, return_date)
-VALUES (1, 2, '2025-07-01', NULL),
+VALUES (1, 2, '2025-07-01', '2025-07-10'),
+       (3, 3, '2025-07-05', NULL),
        (2, 1, '2025-07-03', '2025-07-07'),
-       (3, 3, '2025-07-05', NULL);
+       (1, 3, CURRENT_DATE, NULL);
