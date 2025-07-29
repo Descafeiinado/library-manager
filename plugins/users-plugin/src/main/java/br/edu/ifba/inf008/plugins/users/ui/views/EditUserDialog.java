@@ -6,7 +6,7 @@ import br.edu.ifba.inf008.plugins.users.domain.entities.User;
 import br.edu.ifba.inf008.plugins.users.domain.exceptions.EmailAlreadyExistingException;
 import br.edu.ifba.inf008.plugins.users.domain.exceptions.UserNotFoundException;
 import br.edu.ifba.inf008.plugins.users.infrastructure.models.request.EditUserRequest;
-import br.edu.ifba.inf008.plugins.users.infrastructure.services.UserService;
+import br.edu.ifba.inf008.plugins.users.application.services.UserService;
 import br.edu.ifba.inf008.plugins.users.ui.CSS;
 import jakarta.validation.ConstraintViolationException;
 import javafx.geometry.Insets;
@@ -21,6 +21,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+/**
+ * Dialog for editing an existing user.
+ * This dialog allows the user to modify their name and email address,
+ * and handles validation and error display.
+ */
 public class EditUserDialog extends Stage {
 
     private static final IUIController uiController = ICore.getInstance().getUIController();
@@ -32,6 +37,9 @@ public class EditUserDialog extends Stage {
     private final Label nameErrorLabel = new Label();
     private final Label emailErrorLabel = new Label();
 
+    /**
+     * Callback to be executed when a user is successfully edited.
+     */
     private Runnable onUserEdited;
 
     public EditUserDialog(User user) {
@@ -138,10 +146,23 @@ public class EditUserDialog extends Stage {
         setScene(scene);
     }
 
+    /**
+     * Sets the callback to be executed when a user is successfully edited.
+     *
+     * @param onUserEdited the callback to set
+     */
     public void setOnUserEdited(Runnable onUserEdited) {
         this.onUserEdited = onUserEdited;
     }
 
+    /**
+     * Creates a labeled field with a label, text field, and error label.
+     *
+     * @param labelText   the text for the label
+     * @param field       the text field to be labeled
+     * @param errorLabel  the label to display validation errors
+     * @return a VBox containing the label, text field, and error label
+     */
     private VBox createLabeledField(String labelText, TextField field, Label errorLabel) {
         Label label = new Label(labelText);
         errorLabel.setWrapText(true);
@@ -155,6 +176,9 @@ public class EditUserDialog extends Stage {
         return box;
     }
 
+    /**
+     * Clears all error messages and styles from the form fields.
+     */
     private void clearErrors() {
         nameErrorLabel.setText("");
         emailErrorLabel.setText("");

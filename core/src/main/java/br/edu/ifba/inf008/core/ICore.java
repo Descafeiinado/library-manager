@@ -9,8 +9,10 @@ public abstract class ICore {
     }
 
     public abstract IUIController getUIController();
+
     public abstract IPluginController getPluginController();
 
     public abstract void shutdown();
+
     public abstract void startup();
 }

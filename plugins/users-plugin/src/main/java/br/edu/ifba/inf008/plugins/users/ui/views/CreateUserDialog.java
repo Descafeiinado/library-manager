@@ -5,7 +5,7 @@ import br.edu.ifba.inf008.core.IUIController;
 import br.edu.ifba.inf008.plugins.users.domain.entities.User;
 import br.edu.ifba.inf008.plugins.users.domain.exceptions.EmailAlreadyExistingException;
 import br.edu.ifba.inf008.plugins.users.infrastructure.models.request.CreateUserRequest;
-import br.edu.ifba.inf008.plugins.users.infrastructure.services.UserService;
+import br.edu.ifba.inf008.plugins.users.application.services.UserService;
 import br.edu.ifba.inf008.plugins.users.ui.CSS;
 import jakarta.validation.ConstraintViolationException;
 import java.util.function.Consumer;
@@ -21,6 +21,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+/**
+ * Dialog for creating a new user.
+ * This dialog allows the user to input their name and email address,
+ * and handles validation and error display.
+ */
 public class CreateUserDialog extends Stage {
 
     private static final IUIController uiController = ICore.getInstance().getUIController();
@@ -32,6 +37,9 @@ public class CreateUserDialog extends Stage {
     private final Label nameErrorLabel = new Label();
     private final Label emailErrorLabel = new Label();
 
+    /**
+     * Callback to be executed when a user is successfully created.
+     */
     private Consumer<User> onUserCreated;
 
     public CreateUserDialog() {
@@ -93,7 +101,9 @@ public class CreateUserDialog extends Stage {
                 valid = false;
             }
 
-            if (!valid) return;
+            if (!valid) {
+                return;
+            }
 
             try {
                 User result = userService.create(new CreateUserRequest(email, name));
@@ -130,10 +140,23 @@ public class CreateUserDialog extends Stage {
         setScene(scene);
     }
 
+    /**
+     * Sets the callback to be executed when a user is successfully created.
+     *
+     * @param onUserCreated the callback to set
+     */
     public void setOnUserCreated(Consumer<User> onUserCreated) {
         this.onUserCreated = onUserCreated;
     }
 
+    /**
+     * Creates a labeled field with a label, text field, and error label.
+     *
+     * @param labelText the text for the label
+     * @param field     the text field to be labeled
+     * @param errorLabel the label to display validation errors
+     * @return a VBox containing the label, text field, and error label
+     */
     private VBox createLabeledField(String labelText, TextField field, Label errorLabel) {
         Label label = new Label(labelText);
         errorLabel.setWrapText(true);
@@ -147,6 +170,9 @@ public class CreateUserDialog extends Stage {
         return box;
     }
 
+    /**
+     * Clears any validation errors displayed in the dialog.
+     */
     private void clearErrors() {
         nameErrorLabel.setText("");
         emailErrorLabel.setText("");

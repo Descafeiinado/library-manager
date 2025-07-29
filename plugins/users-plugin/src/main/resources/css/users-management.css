@@ -32,7 +32,7 @@
     -fx-spacing: 8;
     -fx-border-radius: 6;
     -fx-background-radius: 6;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0.2, 0, 4);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0.2, 0, 4);
 }
 
 .um-form-title {
@@ -87,7 +87,7 @@
     -fx-border-color: #0066cc;
     -fx-border-width: 1.5;
     -fx-background-radius: 6;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
 }
 
 .um-id-close-button {

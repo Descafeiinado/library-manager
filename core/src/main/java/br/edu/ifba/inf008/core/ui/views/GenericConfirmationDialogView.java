@@ -3,7 +3,6 @@ package br.edu.ifba.inf008.core.ui.views;
 import br.edu.ifba.inf008.core.ICore;
 import br.edu.ifba.inf008.core.IUIController;
 import br.edu.ifba.inf008.core.ui.CSS;
-import java.util.function.Consumer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,10 +14,19 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+/**
+ * Generic confirmation dialog view.
+ * This dialog is used to confirm actions with a title and message,
+ * and provides buttons for confirmation and cancellation.
+ */
 public class GenericConfirmationDialogView extends Stage {
 
     private static final IUIController uiController = ICore.getInstance().getUIController();
 
+    /**
+     * Callback to be executed when the confirm button is clicked.
+     * This can be set to perform any action needed upon confirmation.
+     */
     private Runnable onConfirmedClick;
 
     public GenericConfirmationDialogView(String title, String message) {
@@ -62,6 +70,11 @@ public class GenericConfirmationDialogView extends Stage {
         setScene(scene);
     }
 
+    /**
+     * Sets the action to be performed when the confirm button is clicked.
+     *
+     * @param onConfirmedClick The action to execute on confirmation.
+     */
     public void setOnConfirmedClick(Runnable onConfirmedClick) {
         this.onConfirmedClick = onConfirmedClick;
     }

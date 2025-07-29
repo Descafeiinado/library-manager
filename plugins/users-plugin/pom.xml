@@ -29,7 +29,7 @@
                 <version>3.2.0</version>
                 <configuration>
                     <outputDirectory>${project.basedir}/../</outputDirectory>
-                    <finalName>UsersManagement</finalName>
+                    <finalName>users-management</finalName>
                 </configuration>
             </plugin>
         </plugins>

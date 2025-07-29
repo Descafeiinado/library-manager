@@ -13,6 +13,7 @@ public interface IUIController {
     boolean createTab(TabInformation tabInformation, Supplier<Node> contents);
 
     ImageView loadIcon(String path);
+
     void loadStylesheetToScene(Scene scene, String path);
 
     Scene getMainScene();

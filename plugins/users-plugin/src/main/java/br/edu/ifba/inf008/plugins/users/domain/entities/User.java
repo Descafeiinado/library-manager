@@ -1,14 +1,24 @@
 package br.edu.ifba.inf008.plugins.users.domain.entities;
 
+import br.edu.ifba.inf008.core.ui.annotations.TableColumnSize;
 import br.edu.ifba.inf008.core.ui.annotations.TableIgnore;
 import br.edu.ifba.inf008.core.ui.annotations.TableLabel;
-import br.edu.ifba.inf008.core.ui.annotations.TableColumnSize;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
 public class User {
+
+
+    /**
+     * Represents a user in the system.
+     */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

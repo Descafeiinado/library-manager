@@ -2,6 +2,13 @@ package br.edu.ifba.inf008.core.domain.models;
 
 import java.util.Collection;
 
+/**
+ * Represents a paginated response containing a collection of items.
+ * This class encapsulates the pagination details such as page number, size,
+ * total elements, and the content of the current page.
+ *
+ * @param <T> The type of items in the paginated response.
+ */
 public class PageableResponse<T> {
 
     private final int page;

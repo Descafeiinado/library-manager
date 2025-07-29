@@ -5,13 +5,12 @@ import br.edu.ifba.inf008.core.ICore;
 import br.edu.ifba.inf008.core.IUIController;
 import br.edu.ifba.inf008.core.ui.CSS;
 import br.edu.ifba.inf008.core.ui.Icons;
-import br.edu.ifba.inf008.core.ui.components.SidebarPane;
+import br.edu.ifba.inf008.core.ui.components.SidebarComponent;
 import br.edu.ifba.inf008.core.ui.models.TabInformation;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -34,11 +33,15 @@ public class UIController extends Application implements IUIController {
 
     private final Map<String, Supplier<Node>> lazyTabContents = new HashMap<>();
 
-    private SidebarPane sidebar;
+    private SidebarComponent sidebar;
     private VBox centerContent;
     private Scene scene;
 
     public UIController() {
+    }
+
+    public static UIController getInstance() {
+        return uiController;
     }
 
     @Override
@@ -49,7 +52,8 @@ public class UIController extends Application implements IUIController {
     @Override
     public Scene getMainScene() {
         if (scene == null) {
-            throw new IllegalStateException("Main scene is not initialized yet. Call start() first.");
+            throw new IllegalStateException(
+                    "Main scene is not initialized yet. Call start() first.");
         }
 
         return scene;
@@ -68,11 +72,13 @@ public class UIController extends Application implements IUIController {
             return;
         }
 
-        System.err.println("Failed to load stylesheet: " + path + " - Searching in plugin class loaders.");
+        System.err.println(
+                "Failed to load stylesheet: " + path + " - Searching in plugin class loaders.");
 
         boolean loadedFromPlugins = false;
 
-        for (ClassLoader pluginClassLoader : Core.getInstance().getPluginController().getPluginClassLoaders()) {
+        for (ClassLoader pluginClassLoader : Core.getInstance().getPluginController()
+                .getPluginClassLoaders()) {
             if (tryLoadStylesheet(scene, path, pluginClassLoader)) {
                 loadedFromPlugins = true;
                 break;
@@ -80,7 +86,8 @@ public class UIController extends Application implements IUIController {
         }
 
         if (!loadedFromPlugins) {
-            System.err.println("Even plugin class loaders couldn't resolve the stylesheet: " + path);
+            System.err.println(
+                    "Even plugin class loaders couldn't resolve the stylesheet: " + path);
         }
     }
 
@@ -91,7 +98,6 @@ public class UIController extends Application implements IUIController {
         String loaderName = loader.getClass().getSimpleName();
 
         if (stylesheetResource == null) {
-            System.err.println("[" + loaderName + "] Stylesheet not found: " + correctedPath);
             return false;
         }
 
@@ -100,7 +106,9 @@ public class UIController extends Application implements IUIController {
             System.out.println("[" + loaderName + "] Loaded stylesheet: " + correctedPath);
             return true;
         } catch (Exception e) {
-            System.err.println("[" + loaderName + "] Failed to load stylesheet: " + correctedPath + " - " + e.getMessage());
+            System.err.println(
+                    "[" + loaderName + "] Failed to load stylesheet: " + correctedPath + " - "
+                            + e.getMessage());
             return false;
         }
     }
@@ -119,11 +127,14 @@ public class UIController extends Application implements IUIController {
             return icon;
         }
 
-        for (ClassLoader pluginClassLoader : Core.getInstance().getPluginController().getPluginClassLoaders()) {
+        for (ClassLoader pluginClassLoader : Core.getInstance().getPluginController()
+                .getPluginClassLoaders()) {
             icon = createIconFromPath(path, pluginClassLoader);
 
             if (icon != null) {
-                System.out.println("Loaded icon from plugin classloader: " + pluginClassLoader.getClass().getSimpleName());
+                System.out.println(
+                        "Loaded icon from plugin classloader: " + pluginClassLoader.getClass()
+                                .getSimpleName());
                 return icon;
             }
         }
@@ -138,7 +149,6 @@ public class UIController extends Application implements IUIController {
 
         try (InputStream iconStream = loader.getResourceAsStream(correctedPath)) {
             if (iconStream == null) {
-                System.err.println("[" + loader.getClass().getSimpleName() + "] Icon not found: " + correctedPath);
                 return null;
             }
 
@@ -149,10 +159,12 @@ public class UIController extends Application implements IUIController {
             view.setPreserveRatio(true);
             view.setSmooth(true);
 
-            System.out.println("[" + loader.getClass().getSimpleName() + "] Loaded icon: " + correctedPath);
+            System.out.println(
+                    "[" + loader.getClass().getSimpleName() + "] Loaded icon: " + correctedPath);
             return view;
         } catch (Exception e) {
-            System.err.println("[" + loader.getClass().getSimpleName() + "] Error loading icon: " + correctedPath + " - " + e.getMessage());
+            System.err.println("[" + loader.getClass().getSimpleName() + "] Error loading icon: "
+                    + correctedPath + " - " + e.getMessage());
             return null;
         }
     }
@@ -165,7 +177,7 @@ public class UIController extends Application implements IUIController {
 
         MenuBar menuBar = new MenuBar();
 
-        sidebar = new SidebarPane(this::updateCenterContent);
+        sidebar = new SidebarComponent(this::updateCenterContent);
 
         centerContent = new VBox();
         centerContent.setPadding(new Insets(20));
@@ -216,7 +228,6 @@ public class UIController extends Application implements IUIController {
         return true;
     }
 
-
     private void createMainTab() {
         sidebar.addTab(MAIN_TAB, loadIcon(Icons.HOUSE));
         sidebar.selectTab(MAIN_TAB);
@@ -264,10 +275,6 @@ public class UIController extends Application implements IUIController {
 
     private String correctClassLoaderPath(String original) {
         return original.startsWith("/") ? original.substring(1) : original;
-    }
-
-    public static UIController getInstance() {
-        return uiController;
     }
 
 }

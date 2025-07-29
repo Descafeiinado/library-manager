@@ -35,6 +35,7 @@
 .confirmation-cancel-button {
     -fx-background-color: #e74c3c;
 }
+
 .confirmation-cancel-button:hover {
     -fx-background-color: #c0392b;
 }
@@ -42,6 +43,7 @@
 .confirmation-confirm-button {
     -fx-background-color: #2ecc71;
 }
+
 .confirmation-confirm-button:hover {
     -fx-background-color: #27ae60;
 }

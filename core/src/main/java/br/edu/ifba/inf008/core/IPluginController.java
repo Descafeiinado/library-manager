@@ -8,6 +8,7 @@ public interface IPluginController {
     boolean isPluginEnabled(String pluginName);
 
     LinkedHashSet<ClassLoader> getPluginClassLoaders();
+
     List<String> getEnabledPlugins();
 
     void init();

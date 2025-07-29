@@ -1,4 +1,4 @@
-package br.edu.ifba.inf008.plugins.users.infrastructure.services;
+package br.edu.ifba.inf008.plugins.users.application.services;
 
 import br.edu.ifba.inf008.core.domain.models.PageRequest;
 import br.edu.ifba.inf008.core.domain.models.PageableResponse;
@@ -13,22 +13,33 @@ import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 
 /**
- * Service class for managing users.
- * Provides methods to create, edit, delete, and find users.
+ * Service class for managing users. Provides methods to create, edit, delete, and find users.
  */
 public class UserService {
 
-    private static final UserService instance = new UserService();
-    private static final UserRepository userRepository = UserRepository.getInstance();
+    private static final UserService instance = new UserService(UserRepository.getInstance());
 
-    private UserService() {
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    /**
+     * Gets the singleton instance of UserService.
+     *
+     * @return the UserService instance
+     */
+    public static UserService getInstance() {
+        return instance;
     }
 
     /**
      * Creates a new user.
-     * @param request the request containing user data
+     *
+     * @param request the request containing user data (name and email)
      * @return the created User entity
-     * @throws ConstraintViolationException if any dto validation fails
+     * @throws ConstraintViolationException  if name or email validation fails
      * @throws EmailAlreadyExistingException if the email is already in use by another user
      */
     public User create(CreateUserRequest request)
@@ -38,9 +49,7 @@ public class UserService {
         String name = request.name();
         String email = request.email();
 
-        if (userRepository.existsByEmail(email)) {
-            throw new EmailAlreadyExistingException(email);
-        }
+        ensureEmailIsUnique(email, null);
 
         var user = new User();
 
@@ -51,8 +60,9 @@ public class UserService {
     }
 
     /**
-     * Deletes a user by setting the deactivatedAt field to the current time.
-     * This is a logical/soft delete.
+     * Deletes a user by setting the deactivatedAt field to the current time. This is a logical/soft
+     * delete.
+     *
      * @param userId the ID of the user to be deleted
      * @throws UserNotFoundException if the user does not exist or is already deactivated
      */
@@ -71,10 +81,11 @@ public class UserService {
 
     /**
      * Edits an existing user.
-     * @param userId the ID of the user to be edited
-     * @param request the request containing the new user data
-     * @throws ConstraintViolationException if any dto validation fails
-     * @throws UserNotFoundException if the user does not exist
+     *
+     * @param userId  the ID of the user to be edited
+     * @param request the request containing updated user data (name and email)
+     * @throws ConstraintViolationException  if name or email validation fails
+     * @throws UserNotFoundException         if the user does not exist
      * @throws EmailAlreadyExistingException if the email is already in use by another user
      */
     public void edit(Long userId, EditUserRequest request)
@@ -87,14 +98,7 @@ public class UserService {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
-        User emailConflict = userRepository.findByEmail(email)
-                .orElse(null);
-
-        if (emailConflict != null) {
-            if (!emailConflict.getUserId().equals(existingUser.getUserId())) {
-                throw new EmailAlreadyExistingException(email);
-            }
-        }
+        ensureEmailIsUnique(email, existingUser.getUserId());
 
         existingUser.setName(name);
         existingUser.setEmail(email);
@@ -104,6 +108,7 @@ public class UserService {
 
     /**
      * Finds all users that are not deactivated (logical/soft delete).
+     *
      * @param page a one-based page index
      * @param size the size of the page to be returned
      * @return a pageable response containing users
@@ -113,11 +118,19 @@ public class UserService {
     }
 
     /**
-     * Gets the singleton instance of UserService.
-     * @return the UserService instance
+     * Ensures that the given email is unique across all users, excluding a specific user ID.
+     *
+     * @param email          the email to check for uniqueness
+     * @param excludedUserId the user ID to exclude from the uniqueness check
+     * @throws EmailAlreadyExistingException if the email is already in use by another user
      */
-    public static UserService getInstance() {
-        return instance;
+    private void ensureEmailIsUnique(String email, Long excludedUserId)
+            throws EmailAlreadyExistingException {
+        User existing = userRepository.findByEmail(email).orElse(null);
+
+        if (existing != null && !existing.getUserId().equals(excludedUserId)) {
+            throw new EmailAlreadyExistingException(email);
+        }
     }
 
 }
