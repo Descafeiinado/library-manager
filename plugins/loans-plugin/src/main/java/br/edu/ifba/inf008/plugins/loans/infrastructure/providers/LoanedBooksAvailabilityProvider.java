@@ -11,9 +11,21 @@ public class LoanedBooksAvailabilityProvider implements BookAvailabilityProvider
     private final BookRepository bookRepository;
     private final LoanRepository loanRepository;
 
-    public LoanedBooksAvailabilityProvider(BookRepository bookRepository, LoanRepository loanRepository) {
+    public LoanedBooksAvailabilityProvider(BookRepository bookRepository,
+            LoanRepository loanRepository) {
         this.bookRepository = bookRepository;
         this.loanRepository = loanRepository;
+    }
+
+    public static void initialize() {
+        System.out.println(
+                "Provider class loader: " + LoanedBooksAvailabilityProvider.class.getClassLoader());
+        System.out.println(
+                "Interface class loader: " + BookAvailabilityProvider.class.getClassLoader());
+
+        BookAvailabilityManager.getInstance().setProvider(
+                new LoanedBooksAvailabilityProvider(BookRepository.getInstance(),
+                        LoanRepository.getInstance()));
     }
 
     @Override
@@ -26,15 +38,6 @@ public class LoanedBooksAvailabilityProvider implements BookAvailabilityProvider
         Long loanedCopies = loanRepository.countByBookIdAndNotReturned(bookId);
 
         return totalCopies - loanedCopies;
-    }
-
-    public static void initialize() {
-        System.out.println("Provider class loader: " + LoanedBooksAvailabilityProvider.class.getClassLoader());
-        System.out.println("Interface class loader: " + BookAvailabilityProvider.class.getClassLoader());
-
-        BookAvailabilityManager.getInstance().setProvider(
-                new LoanedBooksAvailabilityProvider(BookRepository.getInstance(),
-                        LoanRepository.getInstance()));
     }
 
 }

@@ -18,6 +18,7 @@ public interface Repository<T, ID> {
     Optional<T> findOne(String fieldName, Object value);
 
     List<T> findAll();
+
     List<T> findAll(String fieldName, Object value);
 
     PageableResponse<T> findAll(PageRequest pageRequest);

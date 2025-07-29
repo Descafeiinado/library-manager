@@ -3,7 +3,6 @@ package br.edu.ifba.inf008.plugins.users.application.services;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import br.edu.ifba.inf008.plugins.users.application.services.UserService;
 import br.edu.ifba.inf008.plugins.users.domain.entities.User;
 import br.edu.ifba.inf008.plugins.users.domain.exceptions.EmailAlreadyExistingException;
 import br.edu.ifba.inf008.plugins.users.domain.exceptions.UserNotFoundException;

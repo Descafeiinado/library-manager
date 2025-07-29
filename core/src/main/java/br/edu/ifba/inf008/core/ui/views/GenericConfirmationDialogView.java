@@ -15,17 +15,16 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * Generic confirmation dialog view.
- * This dialog is used to confirm actions with a title and message,
- * and provides buttons for confirmation and cancellation.
+ * Generic confirmation dialog view. This dialog is used to confirm actions with a title and
+ * message, and provides buttons for confirmation and cancellation.
  */
 public class GenericConfirmationDialogView extends Stage {
 
     private static final IUIController uiController = ICore.getInstance().getUIController();
 
     /**
-     * Callback to be executed when the confirm button is clicked.
-     * This can be set to perform any action needed upon confirmation.
+     * Callback to be executed when the confirm button is clicked. This can be set to perform any
+     * action needed upon confirmation.
      */
     private Runnable onConfirmedClick;
 

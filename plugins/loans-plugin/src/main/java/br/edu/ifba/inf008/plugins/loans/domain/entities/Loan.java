@@ -13,7 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import java.time.LocalDate;
 
 @Entity
@@ -106,7 +105,8 @@ public class Loan {
             LocalDate now = LocalDate.now();
 
             if (loanDate != null && now.isAfter(loanDate.plusDays(MAX_LOAN_DAYS))) {
-                return "Overdue " + (now.getDayOfYear() - loanDate.plusDays(MAX_LOAN_DAYS).getDayOfYear()) + " days";
+                return "Overdue " + (now.getDayOfYear() - loanDate.plusDays(MAX_LOAN_DAYS)
+                        .getDayOfYear()) + " days";
             }
 
             return "Loaned";
@@ -115,7 +115,8 @@ public class Loan {
         LocalDate wasReturnWithinLimit = loanDate.plusDays(MAX_LOAN_DAYS);
 
         if (returnDate.isAfter(wasReturnWithinLimit)) {
-            return "Returned late by " + (returnDate.getDayOfYear() - wasReturnWithinLimit.getDayOfYear()) + " days";
+            return "Returned late by " + (returnDate.getDayOfYear()
+                    - wasReturnWithinLimit.getDayOfYear()) + " days";
         }
 
         return "Returned on time";

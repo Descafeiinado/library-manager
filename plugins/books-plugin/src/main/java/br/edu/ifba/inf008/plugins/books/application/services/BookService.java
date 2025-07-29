@@ -153,10 +153,10 @@ public class BookService {
     }
 
     /**
-     * Ensures that the book is not locked by checking if the number of available copies is less than
-     * the requested new total copies available.
+     * Ensures that the book is not locked by checking if the number of available copies is less
+     * than the requested new total copies available.
      *
-     * @param book                  the book to check
+     * @param book                    the book to check
      * @param newTotalCopiesAvailable the new total copies available to set
      * @throws BookWithLockedCopiesException if the book has locked copies that prevent the update
      */

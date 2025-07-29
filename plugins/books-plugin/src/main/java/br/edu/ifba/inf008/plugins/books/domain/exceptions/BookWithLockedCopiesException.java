@@ -7,7 +7,7 @@ public class BookWithLockedCopiesException extends Exception {
 
     public BookWithLockedCopiesException(Long bookId, Long currentCopies) {
         super("The book with ID " + bookId + " has locked copies: " + currentCopies + ". " +
-              "Please unlock the copies before proceeding.");
+                "Please unlock the copies before proceeding.");
     }
 
 }

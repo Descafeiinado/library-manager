@@ -1,14 +1,14 @@
 package br.edu.ifba.inf008.plugins.books.infrastructure.models.request;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
- * Request model for creating a new book.
- * Contains validation annotations to ensure the fields are valid.
+ * Request model for creating a new book. Contains validation annotations to ensure the fields are
+ * valid.
  */
 public record CreateBookRequest(
         @NotBlank(message = "The ISBN is required.")
@@ -33,4 +33,5 @@ public record CreateBookRequest(
         @Max(value = 1000, message = "Copies available cannot exceed {max}.")
         Integer copiesAvailable
 ) {
+
 }

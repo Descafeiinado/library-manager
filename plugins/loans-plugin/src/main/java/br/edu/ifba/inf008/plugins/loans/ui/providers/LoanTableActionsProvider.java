@@ -14,8 +14,8 @@ import java.util.function.Predicate;
 public class LoanTableActionsProvider {
 
     /**
-     * Returns a list of actions for the loan table component. Which includes
-     * view, edit, and delete actions.
+     * Returns a list of actions for the loan table component. Which includes view, edit, and delete
+     * actions.
      *
      * @param tableComponent the table component to which the actions will be added
      * @return a list of actions for the loan table component

@@ -2,11 +2,11 @@ package br.edu.ifba.inf008.plugins.users.ui.views;
 
 import br.edu.ifba.inf008.core.ICore;
 import br.edu.ifba.inf008.core.IUIController;
+import br.edu.ifba.inf008.plugins.users.application.services.UserService;
 import br.edu.ifba.inf008.plugins.users.domain.entities.User;
 import br.edu.ifba.inf008.plugins.users.domain.exceptions.EmailAlreadyExistingException;
 import br.edu.ifba.inf008.plugins.users.domain.exceptions.UserNotFoundException;
 import br.edu.ifba.inf008.plugins.users.infrastructure.models.request.EditUserRequest;
-import br.edu.ifba.inf008.plugins.users.application.services.UserService;
 import br.edu.ifba.inf008.plugins.users.ui.CSS;
 import jakarta.validation.ConstraintViolationException;
 import javafx.geometry.Insets;
@@ -26,9 +26,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * Dialog for editing an existing user.
- * This dialog allows the user to modify their name and email address,
- * and handles validation and error display.
+ * Dialog for editing an existing user. This dialog allows the user to modify their name and email
+ * address, and handles validation and error display.
  */
 public class EditUserDialog extends Stage {
 
@@ -162,9 +161,9 @@ public class EditUserDialog extends Stage {
     /**
      * Creates a labeled field with a label, text field, and error label.
      *
-     * @param labelText   the text for the label
-     * @param field       the text field to be labeled
-     * @param errorLabel  the label to display validation errors
+     * @param labelText  the text for the label
+     * @param field      the text field to be labeled
+     * @param errorLabel the label to display validation errors
      * @return a VBox containing the label, text field, and error label
      */
     private VBox createLabeledField(String labelText, Node field, Label errorLabel) {

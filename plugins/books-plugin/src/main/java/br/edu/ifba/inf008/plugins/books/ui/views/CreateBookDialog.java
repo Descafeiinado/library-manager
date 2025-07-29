@@ -2,9 +2,9 @@ package br.edu.ifba.inf008.plugins.books.ui.views;
 
 import br.edu.ifba.inf008.core.ICore;
 import br.edu.ifba.inf008.core.IUIController;
+import br.edu.ifba.inf008.plugins.books.application.services.BookService;
 import br.edu.ifba.inf008.plugins.books.domain.entities.Book;
 import br.edu.ifba.inf008.plugins.books.domain.exceptions.IsbnAlreadyExistingException;
-import br.edu.ifba.inf008.plugins.books.application.services.BookService;
 import br.edu.ifba.inf008.plugins.books.infrastructure.models.request.CreateBookRequest;
 import br.edu.ifba.inf008.plugins.books.ui.CSS;
 import jakarta.validation.ConstraintViolationException;
@@ -29,9 +29,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * Dialog for creating a new book.
- * This dialog allows the user to input book details such as ISBN, title, author,
- * published year, and copies available. And then handles validation and error display.
+ * Dialog for creating a new book. This dialog allows the user to input book details such as ISBN,
+ * title, author, published year, and copies available. And then handles validation and error
+ * display.
  */
 public class CreateBookDialog extends Stage {
 
@@ -141,7 +141,9 @@ public class CreateBookDialog extends Stage {
                 valid = false;
             }
 
-            if (!valid) return;
+            if (!valid) {
+                return;
+            }
 
             try {
                 CreateBookRequest request = new CreateBookRequest(

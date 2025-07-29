@@ -1,14 +1,14 @@
 package br.edu.ifba.inf008.plugins.books.ui.views;
 
 import br.edu.ifba.inf008.core.ui.views.GenericConfirmationDialogView;
-import br.edu.ifba.inf008.plugins.books.domain.entities.Book;
 import br.edu.ifba.inf008.plugins.books.application.services.BookService;
+import br.edu.ifba.inf008.plugins.books.domain.entities.Book;
 import java.util.function.Consumer;
 
 /**
- * Dialog for confirming the deletion of a book.
- * This dialog prompts the book to confirm the deletion of a specified book.
- * If confirmed, it deletes the book and triggers a callback if provided.
+ * Dialog for confirming the deletion of a book. This dialog prompts the book to confirm the
+ * deletion of a specified book. If confirmed, it deletes the book and triggers a callback if
+ * provided.
  */
 public class DeleteBookDialog extends GenericConfirmationDialogView {
 

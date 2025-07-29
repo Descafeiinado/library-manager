@@ -1,14 +1,14 @@
 package br.edu.ifba.inf008.plugins.users.ui.views;
 
 import br.edu.ifba.inf008.core.ui.views.GenericConfirmationDialogView;
-import br.edu.ifba.inf008.plugins.users.domain.entities.User;
 import br.edu.ifba.inf008.plugins.users.application.services.UserService;
+import br.edu.ifba.inf008.plugins.users.domain.entities.User;
 import java.util.function.Consumer;
 
 /**
- * Dialog for confirming the deletion of a user.
- * This dialog prompts the user to confirm the deletion of a specified user.
- * If confirmed, it deletes the user and triggers a callback if provided.
+ * Dialog for confirming the deletion of a user. This dialog prompts the user to confirm the
+ * deletion of a specified user. If confirmed, it deletes the user and triggers a callback if
+ * provided.
  */
 public class DeleteUserDialog extends GenericConfirmationDialogView {
 

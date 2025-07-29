@@ -1,5 +1,7 @@
-CREATE DATABASE IF NOT EXISTS bookstore;
-USE bookstore;
+CREATE
+DATABASE IF NOT EXISTS bookstore;
+USE
+bookstore;
 
 CREATE TABLE users
 (
@@ -17,16 +19,16 @@ CREATE TABLE books
     author           VARCHAR(100)       NOT NULL,
     isbn             VARCHAR(20) UNIQUE NOT NULL,
     published_year   INT,
-    copies_available INT DEFAULT 0,
-    deactivated_at DATETIME DEFAULT NULL
+    copies_available INT      DEFAULT 0,
+    deactivated_at   DATETIME DEFAULT NULL
 );
 
 CREATE TABLE loans
 (
     loan_id     BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id     BIGINT  NOT NULL,
-    book_id     BIGINT  NOT NULL,
-    loan_date   DATE NOT NULL,
+    user_id     BIGINT NOT NULL,
+    book_id     BIGINT NOT NULL,
+    loan_date   DATE   NOT NULL,
     return_date DATE,
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
     FOREIGN KEY (book_id) REFERENCES books (book_id) ON DELETE CASCADE

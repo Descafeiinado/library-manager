@@ -1,10 +1,11 @@
 package br.edu.ifba.inf008.core.domain.interfaces;
 
 /**
- * Interface representing an entity that has a name.
- * This interface provides methods to get and set the name of the entity.
+ * Interface representing an entity that has a name. This interface provides methods to get and set
+ * the name of the entity.
  */
 public interface Nameable {
+
     /**
      * Returns the name of the entity.
      *

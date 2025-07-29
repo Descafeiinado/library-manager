@@ -15,6 +15,6 @@ public record CreateLoanRequest(
         @NotNull(message = "The book ID is required.")
         @Min(value = 1, message = "The book ID must be a positive number.")
         Long bookId
-        ) {
+) {
 
 }

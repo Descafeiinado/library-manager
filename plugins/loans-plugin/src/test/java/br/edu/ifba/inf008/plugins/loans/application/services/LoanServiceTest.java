@@ -1,5 +1,8 @@
 package br.edu.ifba.inf008.plugins.loans.application.services;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import br.edu.ifba.inf008.plugins.books.domain.entities.Book;
 import br.edu.ifba.inf008.plugins.books.domain.exceptions.BookNotFoundException;
 import br.edu.ifba.inf008.plugins.books.infrastructure.managers.BookAvailabilityManager;
@@ -15,15 +18,16 @@ import br.edu.ifba.inf008.plugins.users.domain.entities.User;
 import br.edu.ifba.inf008.plugins.users.domain.exceptions.UserNotFoundException;
 import br.edu.ifba.inf008.plugins.users.infrastructure.repositories.UserRepository;
 import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.junit.jupiter.api.*;
-
-import java.time.LocalDate;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LoanServiceTest {
@@ -90,7 +94,8 @@ public class LoanServiceTest {
         };
 
         bookAvailabilityManager = new BookAvailabilityManager(bookRepository);
-        loanService = new LoanService(loanRepository, bookRepository, userRepository, bookAvailabilityManager);
+        loanService = new LoanService(loanRepository, bookRepository, userRepository,
+                bookAvailabilityManager);
     }
 
     @AfterAll
@@ -165,7 +170,8 @@ public class LoanServiceTest {
 
             loanService.create(new CreateLoanRequest(user.getUserId(), book.getBookId()));
 
-            CreateLoanRequest duplicateRequest = new CreateLoanRequest(user.getUserId(), book.getBookId());
+            CreateLoanRequest duplicateRequest = new CreateLoanRequest(user.getUserId(),
+                    book.getBookId());
             assertThatThrownBy(() -> loanService.create(duplicateRequest))
                     .isInstanceOf(UserAlreadyLoanedBookException.class);
         }
@@ -178,7 +184,8 @@ public class LoanServiceTest {
         void markAsReturned_Success() throws Exception {
             User user = createUser("Charlie Davis");
             Book book = createBook("The Catcher in the Rye", 1);
-            Loan loan = loanService.create(new CreateLoanRequest(user.getUserId(), book.getBookId()));
+            Loan loan = loanService.create(
+                    new CreateLoanRequest(user.getUserId(), book.getBookId()));
 
             loanService.markAsReturned(loan.getLoanId());
 
@@ -199,7 +206,8 @@ public class LoanServiceTest {
         void markAsReturned_ThrowsWhenAlreadyReturned() throws Exception {
             User user = createUser("Diana Prince");
             Book book = createBook("Moby Dick", 1);
-            Loan loan = loanService.create(new CreateLoanRequest(user.getUserId(), book.getBookId()));
+            Loan loan = loanService.create(
+                    new CreateLoanRequest(user.getUserId(), book.getBookId()));
 
             loanService.markAsReturned(loan.getLoanId());
 

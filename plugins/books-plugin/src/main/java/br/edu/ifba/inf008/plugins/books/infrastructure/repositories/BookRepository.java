@@ -26,6 +26,7 @@ public class BookRepository extends HibernateRepository<Book, Long> {
 
     /**
      * Finds all books that are not deactivated.
+     *
      * @param pageRequest the pagination request containing page number and size
      * @return a pageable response containing books that are not deactivated
      */
@@ -35,6 +36,7 @@ public class BookRepository extends HibernateRepository<Book, Long> {
 
     /**
      * Finds a book by their isbn.
+     *
      * @param isbn the isbn of the book to find
      * @return an Optional containing the Book if found, or empty if not found
      */

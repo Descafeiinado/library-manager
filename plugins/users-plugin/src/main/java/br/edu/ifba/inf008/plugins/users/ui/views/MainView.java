@@ -3,8 +3,8 @@ package br.edu.ifba.inf008.plugins.users.ui.views;
 import br.edu.ifba.inf008.core.IUIController;
 import br.edu.ifba.inf008.core.ui.Icons;
 import br.edu.ifba.inf008.core.ui.components.table.TableComponent;
-import br.edu.ifba.inf008.plugins.users.domain.entities.User;
 import br.edu.ifba.inf008.plugins.users.application.services.UserService;
+import br.edu.ifba.inf008.plugins.users.domain.entities.User;
 import br.edu.ifba.inf008.plugins.users.ui.providers.UserTableActionsProvider;
 import java.util.function.Supplier;
 import javafx.geometry.Pos;
@@ -18,8 +18,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
- * Main view for the Users Plugin.
- * This view displays a table of users and provides an option to create a new user.
+ * Main view for the Users Plugin. This view displays a table of users and provides an option to
+ * create a new user.
  */
 public class MainView extends VBox {
 
@@ -34,6 +34,18 @@ public class MainView extends VBox {
         this.tableComponent = new TableComponent<>(User.class, userService::findAll);
         this.tableComponent.addActionColumn(UserTableActionsProvider.getActions(tableComponent));
         initialize();
+    }
+
+    /**
+     * Supplier method to create a new instance of MainView. This is useful for dependency injection
+     * or when a Node factory is required.
+     *
+     * @param controller The UI controller.
+     * @param service    The user service.
+     * @return A supplier that provides a new instance of MainView.
+     */
+    public static Supplier<Node> supply(IUIController controller, UserService service) {
+        return () -> new MainView(controller, service);
     }
 
     /**
@@ -60,8 +72,8 @@ public class MainView extends VBox {
     }
 
     /**
-     * Configures the action for the "Create User" button.
-     * Opens a dialog to create a new user and reloads the table upon successful creation.
+     * Configures the action for the "Create User" button. Opens a dialog to create a new user and
+     * reloads the table upon successful creation.
      *
      * @param createButton The button to configure.
      */
@@ -80,19 +92,6 @@ public class MainView extends VBox {
      */
     public Scene toScene() {
         return new Scene(this);
-    }
-
-
-    /**
-     * Supplier method to create a new instance of MainView.
-     * This is useful for dependency injection or when a Node factory is required.
-     *
-     * @param controller The UI controller.
-     * @param service The user service.
-     * @return A supplier that provides a new instance of MainView.
-     */
-    public static Supplier<Node> supply(IUIController controller, UserService service) {
-        return () -> new MainView(controller, service);
     }
 
 }

@@ -71,10 +71,10 @@ public class TableColumnFactory {
     /**
      * Creates a TableColumn with the specified header name and value provider.
      *
-     * @param headerName   the header name for the column
+     * @param headerName    the header name for the column
      * @param valueProvider a function that provides the value for each cell in the column
-     * @param prefWidth    the preferred width of the column
-     * @param <T>          the type of the table items
+     * @param prefWidth     the preferred width of the column
+     * @param <T>           the type of the table items
      * @return a TableColumn with the specified properties
      */
     private static <T> TableColumn<T, String> createColumn(String headerName,

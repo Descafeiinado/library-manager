@@ -61,11 +61,11 @@ public class LoanService {
      *
      * @param request the request containing the user ID and book ID for the loan
      * @return the created Loan entity
-     * @throws ConstraintViolationException if the request validation fails
-     * @throws UserNotFoundException         if the user with the given ID does not exist
-     * @throws BookNotFoundException         if the book with the given ID does not exist
+     * @throws ConstraintViolationException    if the request validation fails
+     * @throws UserNotFoundException           if the user with the given ID does not exist
+     * @throws BookNotFoundException           if the book with the given ID does not exist
      * @throws BookNotAvailableToLoanException if the book is not available for loan
-     * @throws UserAlreadyLoanedBookException if the user has already loaned this book
+     * @throws UserAlreadyLoanedBookException  if the user has already loaned this book
      */
     public Loan create(CreateLoanRequest request)
             throws ConstraintViolationException, UserNotFoundException, BookNotFoundException, BookNotAvailableToLoanException, UserAlreadyLoanedBookException {

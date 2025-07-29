@@ -16,8 +16,8 @@ import java.util.function.Predicate;
 public class UserTableActionsProvider {
 
     /**
-     * Returns a list of actions for the user table component. Which includes
-     * view, edit, and delete actions.
+     * Returns a list of actions for the user table component. Which includes view, edit, and delete
+     * actions.
      *
      * @param tableComponent the table component to which the actions will be added
      * @return a list of actions for the user table component

@@ -32,9 +32,22 @@ public class MainView extends VBox {
         this.getStyleClass().add("lm-main-content");
 
         this.tableComponent = new TableComponent<>(Loan.class, loanService::findAll);
-        this.tableComponent.addActionColumn(LoanTableActionsProvider.getActions(tableComponent),  45, 15, 85);
+        this.tableComponent.addActionColumn(LoanTableActionsProvider.getActions(tableComponent), 45,
+                15, 85);
 
         initialize();
+    }
+
+    /**
+     * Supplier method to create a new instance of MainView. This is useful for dependency injection
+     * or when a Node factory is required.
+     *
+     * @param controller The UI controller.
+     * @param service    The loan service.
+     * @return A supplier that provides a new instance of MainView.
+     */
+    public static Supplier<Node> supply(IUIController controller, LoanService service) {
+        return () -> new MainView(controller, service);
     }
 
     /**
@@ -84,18 +97,6 @@ public class MainView extends VBox {
      */
     public Scene toScene() {
         return new Scene(this);
-    }
-
-    /**
-     * Supplier method to create a new instance of MainView. This is useful for dependency injection
-     * or when a Node factory is required.
-     *
-     * @param controller The UI controller.
-     * @param service    The loan service.
-     * @return A supplier that provides a new instance of MainView.
-     */
-    public static Supplier<Node> supply(IUIController controller, LoanService service) {
-        return () -> new MainView(controller, service);
     }
 
 }

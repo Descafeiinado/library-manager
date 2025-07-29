@@ -21,9 +21,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * Dialog for viewing user identity details.
- * This dialog displays the user's name, email, and registration date,
- * along with a circular photo placeholder.
+ * Dialog for viewing user identity details. This dialog displays the user's name, email, and
+ * registration date, along with a circular photo placeholder.
  */
 public class ViewUserDialog extends Stage {
 

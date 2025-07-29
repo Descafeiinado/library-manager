@@ -31,6 +31,7 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
 
     /**
      * Finds an entity by its identifier.
+     *
      * @param id the identifier of the entity
      * @return an Optional containing the entity if found, or empty if not found
      */
@@ -43,10 +44,11 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
         }
     }
 
-    /**    
+    /**
      * Finds an entity by a specific field and its value.
+     *
      * @param fieldName the name of the field to search by
-     * @param value the value of the field to search for
+     * @param value     the value of the field to search for
      * @return an Optional containing the entity if found, or empty if not found
      */
     @Override
@@ -65,6 +67,7 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
 
     /**
      * Finds all entities of the specified type.
+     *
      * @return a list of all entities
      */
     @Override
@@ -82,8 +85,9 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
 
     /**
      * Finds all entities with a specific field value.
+     *
      * @param fieldName the name of the field to search by
-     * @param value the value of the field to search for
+     * @param value     the value of the field to search for
      * @return a list of entities matching the criteria
      */
     @Override
@@ -107,6 +111,7 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
 
     /**
      * Finds all entities with pagination support.
+     *
      * @param pageRequest the pagination request containing page number and size
      * @return a pageable response containing the entities
      */
@@ -127,9 +132,10 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
 
     /**
      * Finds all entities with a specific field value and pagination support.
+     *
      * @param pageRequest the pagination request containing page number and size
-     * @param fieldName the name of the field to search by
-     * @param value the value of the field to search for
+     * @param fieldName   the name of the field to search by
+     * @param value       the value of the field to search for
      * @return a pageable response containing the entities
      */
     @Override
@@ -163,6 +169,7 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
 
     /**
      * Saves an entity to the database.
+     *
      * @param entity the entity to save
      * @return the saved entity
      */
@@ -190,6 +197,7 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
 
     /**
      * Deletes an entity from the database.
+     *
      * @param entity the entity to delete
      */
     @Override
@@ -210,15 +218,17 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
 
     /**
      * Gets the current Hibernate session.
+     *
      * @return the current Hibernate session
      */
     public Session getSession() {
         return HibernateManager.getSession();
     }
-    
+
     /**
-     * Gets the table name for the entity class.
-     * If the entity class does not have a @Table annotation, it returns the simple class name.
+     * Gets the table name for the entity class. If the entity class does not have a @Table
+     * annotation, it returns the simple class name.
+     *
      * @return the table name
      */
     private String getTableName() {
@@ -226,7 +236,7 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
 
         try {
             Table tableAnnotation = entityClass.getAnnotation(Table.class);
-            
+
             return tableAnnotation.name();
         } catch (Exception exception) {
             return fallback;

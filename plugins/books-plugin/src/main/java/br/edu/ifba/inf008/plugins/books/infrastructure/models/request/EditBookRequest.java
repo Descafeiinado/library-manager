@@ -7,8 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 /**
- * Request model for editing an existing book.
- * Contains validation annotations to ensure the fields are valid.
+ * Request model for editing an existing book. Contains validation annotations to ensure the fields
+ * are valid.
  */
 public record EditBookRequest(
         @NotBlank(message = "The ISBN is required.")

@@ -13,9 +13,8 @@ import org.hibernate.boot.registry.classloading.internal.AggregatedClassLoader;
 import org.hibernate.boot.registry.classloading.internal.TcclLookupPrecedence;
 
 /**
- * HibernateManager is responsible for managing the Hibernate SessionFactory and
- * providing methods to register entity classes, build the session factory, and
- * obtain sessions.
+ * HibernateManager is responsible for managing the Hibernate SessionFactory and providing methods
+ * to register entity classes, build the session factory, and obtain sessions.
  */
 public class HibernateManager {
 
@@ -23,8 +22,8 @@ public class HibernateManager {
     private static SessionFactory sessionFactory;
 
     /**
-     * Builds the Hibernate SessionFactory using the registered entity classes.
-     * This method should be called before obtaining any sessions.
+     * Builds the Hibernate SessionFactory using the registered entity classes. This method should
+     * be called before obtaining any sessions.
      */
     public static void buildSessionFactory() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
@@ -50,8 +49,8 @@ public class HibernateManager {
     }
 
     /**
-     * Registers an entity class to be included in the Hibernate SessionFactory.
-     * This method can be called multiple times to register multiple entity classes.
+     * Registers an entity class to be included in the Hibernate SessionFactory. This method can be
+     * called multiple times to register multiple entity classes.
      *
      * @param entityClass the class of the entity to register
      */
@@ -62,8 +61,8 @@ public class HibernateManager {
     }
 
     /**
-     * Shuts down the Hibernate SessionFactory, releasing all resources.
-     * This method should be called when the application is shutting down.
+     * Shuts down the Hibernate SessionFactory, releasing all resources. This method should be
+     * called when the application is shutting down.
      */
     public static void shutdownSessionFactory() {
         if (sessionFactory != null) {
@@ -72,8 +71,8 @@ public class HibernateManager {
     }
 
     /**
-     * Obtains a new Hibernate session from the SessionFactory.
-     * This method should be used to create a new session for database operations.
+     * Obtains a new Hibernate session from the SessionFactory. This method should be used to create
+     * a new session for database operations.
      *
      * @return a new Hibernate Session
      */
@@ -87,8 +86,8 @@ public class HibernateManager {
     }
 
     /**
-     * Gets the current Hibernate SessionFactory.
-     * This method can be used to access the SessionFactory directly.
+     * Gets the current Hibernate SessionFactory. This method can be used to access the
+     * SessionFactory directly.
      *
      * @return the current SessionFactory
      */

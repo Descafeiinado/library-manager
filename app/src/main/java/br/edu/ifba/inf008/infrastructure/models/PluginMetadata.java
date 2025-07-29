@@ -1,6 +1,5 @@
 package br.edu.ifba.inf008.infrastructure.models;
 
-import br.edu.ifba.inf008.core.IPlugin;
 import java.net.URL;
 import java.net.URLClassLoader;
 

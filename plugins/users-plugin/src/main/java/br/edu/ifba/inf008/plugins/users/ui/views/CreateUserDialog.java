@@ -2,10 +2,10 @@ package br.edu.ifba.inf008.plugins.users.ui.views;
 
 import br.edu.ifba.inf008.core.ICore;
 import br.edu.ifba.inf008.core.IUIController;
+import br.edu.ifba.inf008.plugins.users.application.services.UserService;
 import br.edu.ifba.inf008.plugins.users.domain.entities.User;
 import br.edu.ifba.inf008.plugins.users.domain.exceptions.EmailAlreadyExistingException;
 import br.edu.ifba.inf008.plugins.users.infrastructure.models.request.CreateUserRequest;
-import br.edu.ifba.inf008.plugins.users.application.services.UserService;
 import br.edu.ifba.inf008.plugins.users.ui.CSS;
 import jakarta.validation.ConstraintViolationException;
 import java.util.function.Consumer;
@@ -26,9 +26,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * Dialog for creating a new user.
- * This dialog allows the user to input their name and email address,
- * and handles validation and error display.
+ * Dialog for creating a new user. This dialog allows the user to input their name and email
+ * address, and handles validation and error display.
  */
 public class CreateUserDialog extends Stage {
 
@@ -156,8 +155,8 @@ public class CreateUserDialog extends Stage {
     /**
      * Creates a labeled field with a label, text field, and error label.
      *
-     * @param labelText the text for the label
-     * @param field     the text field to be labeled
+     * @param labelText  the text for the label
+     * @param field      the text field to be labeled
      * @param errorLabel the label to display validation errors
      * @return a VBox containing the label, text field, and error label
      */

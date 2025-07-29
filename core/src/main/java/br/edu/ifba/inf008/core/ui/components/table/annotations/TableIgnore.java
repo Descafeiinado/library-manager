@@ -6,9 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to indicate that a field should be ignored in table representations.
- * This annotation can be used to exclude specific fields from being displayed in tables.
- * It is typically applied to fields in data models that are not relevant for table views.
+ * Annotation to indicate that a field should be ignored in table representations. This annotation
+ * can be used to exclude specific fields from being displayed in tables. It is typically applied to
+ * fields in data models that are not relevant for table views.
  */
 
 @Retention(RetentionPolicy.RUNTIME)

@@ -1,8 +1,8 @@
 package br.edu.ifba.inf008.core.domain.models;
 
 /**
- * Represents a request for paginated data.
- * This record holds the page number and the limit of items per page.
+ * Represents a request for paginated data. This record holds the page number and the limit of items
+ * per page.
  *
  * @param page  The page number to retrieve (0-based index).
  * @param limit The maximum number of items to return per page.

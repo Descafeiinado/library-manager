@@ -17,6 +17,10 @@ public class BookAvailabilityManager {
         instance = this;
     }
 
+    public static BookAvailabilityManager getInstance() {
+        return instance;
+    }
+
     public void setProvider(BookAvailabilityProvider provider) {
         this.provider = provider;
     }
@@ -29,10 +33,6 @@ public class BookAvailabilityManager {
         Long availableCopies = getAvailableCopies(bookId);
 
         return availableCopies != null && availableCopies > 0;
-    }
-
-    public static BookAvailabilityManager getInstance() {
-        return instance;
     }
 
 }

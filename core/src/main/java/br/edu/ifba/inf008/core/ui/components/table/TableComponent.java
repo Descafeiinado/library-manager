@@ -2,26 +2,17 @@ package br.edu.ifba.inf008.core.ui.components.table;
 
 import br.edu.ifba.inf008.core.ICore;
 import br.edu.ifba.inf008.core.IUIController;
-import br.edu.ifba.inf008.core.domain.interfaces.Nameable;
 import br.edu.ifba.inf008.core.domain.models.PageableResponse;
-import br.edu.ifba.inf008.core.ui.components.table.annotations.TableColumnSize;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableIgnore;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableLabel;
 import br.edu.ifba.inf008.core.ui.components.table.factories.TableColumnFactory;
 import br.edu.ifba.inf008.core.ui.components.table.interfaces.TableAction;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.function.BiFunction;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -155,7 +146,8 @@ public class TableComponent<T> extends VBox {
                 headerName = field.getAnnotation(TableLabel.class).value();
             }
 
-            TableColumn<T, String> column = TableColumnFactory.getTStringTableColumn(field, headerName);
+            TableColumn<T, String> column = TableColumnFactory.getTStringTableColumn(field,
+                    headerName);
             tableView.getColumns().add(column);
         }
 
@@ -220,10 +212,11 @@ public class TableComponent<T> extends VBox {
      * Adds a custom action column to the table with a list of actions. Each action will be
      * represented by a button in the action column.
      *
-     * @param actions The list of TableAction objects to be added as buttons in the action column.
+     * @param actions   The list of TableAction objects to be added as buttons in the action
+     *                  column.
      * @param prefWidth The preferred width of the action column.
-     * @param minWidth The minimum width of the action column.
-     * @param maxWidth The maximum width of the action column.
+     * @param minWidth  The minimum width of the action column.
+     * @param maxWidth  The maximum width of the action column.
      */
     public void addActionColumn(List<TableAction<T>> actions, double prefWidth, double minWidth,
             double maxWidth) {

@@ -26,6 +26,7 @@ public class UserRepository extends HibernateRepository<User, Long> {
 
     /**
      * Checks if a user with the given email already exists.
+     *
      * @param email the email to check
      * @return true if a user with the given email exists, false otherwise
      */
@@ -35,6 +36,7 @@ public class UserRepository extends HibernateRepository<User, Long> {
 
     /**
      * Finds all users that are not deactivated.
+     *
      * @param pageRequest the pagination request containing page number and size
      * @return a pageable response containing users that are not deactivated
      */
@@ -44,6 +46,7 @@ public class UserRepository extends HibernateRepository<User, Long> {
 
     /**
      * Finds a user by their email.
+     *
      * @param email the email of the user to find
      * @return an Optional containing the User if found, or empty if not found
      */
