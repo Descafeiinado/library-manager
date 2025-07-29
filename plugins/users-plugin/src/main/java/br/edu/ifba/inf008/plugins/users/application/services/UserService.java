@@ -74,6 +74,7 @@ public class UserService {
             throw new UserNotFoundException(userId);
         }
 
+        user.setEmail(user.getEmail() + "#" + user.getUserId()); // Save email with user ID to avoid conflicts
         user.setDeactivatedAt(LocalDateTime.now());
 
         userRepository.save(user);

@@ -43,7 +43,7 @@ public class CreateUserDialog extends Stage {
     private Consumer<User> onUserCreated;
 
     public CreateUserDialog() {
-        setTitle("Create User");
+        setTitle("Creating User");
 
         initModality(Modality.APPLICATION_MODAL);
         initStyle(StageStyle.UTILITY);

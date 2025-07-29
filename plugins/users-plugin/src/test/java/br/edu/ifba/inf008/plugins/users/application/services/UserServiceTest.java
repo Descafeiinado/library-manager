@@ -1,4 +1,4 @@
-package br.edu.ifba.inf008.plugins.users.infrastructure.services;
+package br.edu.ifba.inf008.plugins.users.application.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

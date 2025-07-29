@@ -88,21 +88,12 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
     @Override
     public PageableResponse<T> findAll(PageRequest pageRequest) {
         try (Session session = getSession()) {
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<T> cq = cb.createQuery(entityClass);
-
-            Root<T> root = cq.from(entityClass);
-            cq.select(root);
-
-            List<T> content = session.createQuery(cq)
+            List<T> content = session.createQuery("from " + entityClass.getName(), entityClass)
                     .setFirstResult(pageRequest.page() * pageRequest.limit())
                     .setMaxResults(pageRequest.limit()).list();
 
-            CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-            Root<T> countRoot = countQuery.from(entityClass);
-            countQuery.select(cb.count(countRoot));
-
-            long totalElements = session.createQuery(countQuery).uniqueResult();
+            long totalElements = (long) session.createQuery(
+                    "select count(*) from " + entityClass.getName()).uniqueResult();
 
             return new PageableResponse<>(pageRequest.page(), pageRequest.limit(), totalElements,
                     content);
@@ -135,13 +126,10 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
             List<T> content = session.createQuery(cq)
                     .setFirstResult(pageRequest.page() * pageRequest.limit())
                     .setMaxResults(pageRequest.limit()).list();
-            
-            CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-            Root<T> countRoot = countQuery.from(entityClass);
-            
-            countQuery.select(cb.count(countRoot)).where(predicate);
-            
-            long totalElements = session.createQuery(countQuery).uniqueResult();
+
+            long totalElements = (long) session.createQuery(
+                    "select count(*) from " + entityClass.getName() + " where " + fieldName
+                            + " = :value").setParameter("value", value).uniqueResult();
 
             return new PageableResponse<>(pageRequest.page(), pageRequest.limit(), totalElements,
                     content);

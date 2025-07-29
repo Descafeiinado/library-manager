@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 public class User {
 
-
     /**
      * Represents a user in the system.
      */

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /**
- * Request model for editing a new user.
+ * Request model for editing a existing user.
  * Contains validation annotations to ensure the email and name fields are valid.
  */
 public record EditUserRequest(
