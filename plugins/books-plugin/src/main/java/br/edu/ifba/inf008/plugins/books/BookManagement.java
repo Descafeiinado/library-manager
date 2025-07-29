@@ -28,7 +28,7 @@ public class BookManagement implements IPlugin {
     }
 
     @Override
-    public boolean postInit() {
+    public void postInit() {
         ICore core = ICore.getInstance();
         IUIController uiController = core.getUIController();
 
@@ -37,6 +37,5 @@ public class BookManagement implements IPlugin {
                 new TabInformation("Books", uiController.loadIcon(PluginIcons.BOOKS)),
                 MainView.supply(uiController, bookService));
 
-        return true;
     }
 }

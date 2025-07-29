@@ -28,7 +28,7 @@ public class LoanManagement implements IPlugin {
     }
 
     @Override
-    public boolean postInit() {
+    public void postInit() {
         ICore core = ICore.getInstance();
         IUIController uiController = core.getUIController();
 
@@ -40,7 +40,6 @@ public class LoanManagement implements IPlugin {
 
         LoanedBooksAvailabilityProvider.initialize();
 
-        return true;
     }
 
 }

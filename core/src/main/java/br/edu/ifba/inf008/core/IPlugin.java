@@ -4,7 +4,6 @@ public interface IPlugin {
 
     boolean init();
 
-    default boolean postInit() {
-        return true;
+    default void postInit() {
     }
 }

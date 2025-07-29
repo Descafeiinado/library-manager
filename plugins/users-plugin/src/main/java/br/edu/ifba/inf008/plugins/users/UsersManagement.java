@@ -27,7 +27,7 @@ public class UsersManagement implements IPlugin {
     }
 
     @Override
-    public boolean postInit() {
+    public void postInit() {
         ICore core = ICore.getInstance();
         IUIController uiController = core.getUIController();
 
@@ -37,6 +37,5 @@ public class UsersManagement implements IPlugin {
                 new TabInformation("Users", uiController.loadIcon(PluginIcons.USERS)),
                 MainView.supply(uiController, userService));
 
-        return true;
     }
 }
