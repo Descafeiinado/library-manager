@@ -1,0 +1,16 @@
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/UsersManagement.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/domain/entities/User.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/domain/exceptions/EmailAlreadyExistingException.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/domain/exceptions/UserNotFoundException.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/infrastructure/models/request/CreateUserRequest.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/infrastructure/models/request/EditUserRequest.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/infrastructure/repositories/UserRepository.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/infrastructure/services/UserService.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/ui/CSS.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/ui/PluginIcons.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/ui/providers/UserTableActionsProvider.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/ui/views/CreateUserDialog.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/ui/views/DeleteUserDialog.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/ui/views/EditUserDialog.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/ui/views/MainView.java
+/home/heavenus/Development/IFBA/INF008/T2/microkernel/plugins/users-plugin/src/main/java/br/edu/ifba/inf008/plugins/users/ui/views/ViewUserDialog.java

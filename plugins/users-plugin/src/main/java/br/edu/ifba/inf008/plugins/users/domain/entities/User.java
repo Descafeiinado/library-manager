@@ -1,8 +1,8 @@
 package br.edu.ifba.inf008.plugins.users.domain.entities;
 
-import br.edu.ifba.inf008.core.ui.annotations.TableColumnSize;
-import br.edu.ifba.inf008.core.ui.annotations.TableIgnore;
-import br.edu.ifba.inf008.core.ui.annotations.TableLabel;
+import br.edu.ifba.inf008.core.ui.components.table.annotations.TableColumnSize;
+import br.edu.ifba.inf008.core.ui.components.table.annotations.TableIgnore;
+import br.edu.ifba.inf008.core.ui.components.table.annotations.TableLabel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

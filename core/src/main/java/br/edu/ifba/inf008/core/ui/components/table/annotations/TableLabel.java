@@ -1,4 +1,4 @@
-package br.edu.ifba.inf008.core.ui.annotations;
+package br.edu.ifba.inf008.core.ui.components.table.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
