@@ -47,7 +47,7 @@ public class TableColumnFactory {
         double width = method.isAnnotationPresent(TableColumnSize.class)
                 ? method.getAnnotation(TableColumnSize.class).value() : 150;
         Pos alignment = method.isAnnotationPresent(TableColumnOrientation.class)
-                ? method.getAnnotation(TableColumnOrientation.class).value() : Pos.CENTER_LEFT;
+                ? method.getAnnotation(TableColumnOrientation.class).value() : Pos.CENTER;
 
         return createColumn(headerName, valueProvider, width, alignment);
     }
@@ -71,7 +71,7 @@ public class TableColumnFactory {
         double width = field.isAnnotationPresent(TableColumnSize.class)
                 ? field.getAnnotation(TableColumnSize.class).value() : 150;
         Pos alignment = field.isAnnotationPresent(TableColumnOrientation.class)
-                ? field.getAnnotation(TableColumnOrientation.class).value() : Pos.CENTER_LEFT;
+                ? field.getAnnotation(TableColumnOrientation.class).value() : Pos.CENTER;
 
         return createColumn(headerName, valueProvider, width, alignment);
     }

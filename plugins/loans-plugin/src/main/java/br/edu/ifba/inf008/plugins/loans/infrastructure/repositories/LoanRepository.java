@@ -57,9 +57,41 @@ public class LoanRepository extends HibernateRepository<Loan, Long> {
         }
     }
 
+    /**
+     * Finds all loans for a specific book that have not been returned, with pagination.
+     *
+     * @param bookId the ID of the book
+     * @param page the page number (0-based)
+     * @param size the number of items per page
+     * @return a pageable response containing loans that have not been returned
+     */
+    public PageableResponse<Loan> findAllByBookIdAndNotReturned(Long bookId, int page, int size) {
+        try (var session = getSession()) {
+            List<Loan> loans = session.createQuery("""
+                                FROM Loan l
+                                WHERE l.book.id = :bookId AND l.returnDate IS NULL
+                            """, Loan.class).setParameter("bookId", bookId)
+                    .setFirstResult(page * size).setMaxResults(size).getResultList();
+
+            long totalElements = session.createQuery("""
+                        SELECT COUNT(l)
+                        FROM Loan l
+                        WHERE l.book.id = :bookId AND l.returnDate IS NULL
+                    """, Long.class).setParameter("bookId", bookId).getSingleResult();
+
+            return new PageableResponse<>(page, size, totalElements, loans);
+        }
+    }
+
+    /**
+     * Finds all loaned books information with pagination.
+     *
+     * @param page the page number (0-based)
+     * @param size the number of items per page
+     * @return a pageable response containing loaned book information
+     */
     public PageableResponse<LoanedBookInformationModel> findLoanedBooks(int page, int size) {
         try (var session = getSession()) {
-            // Step 1: Get distinct book IDs with active loans, paginated
             List<Long> bookIds = session.createQuery("""
                                 SELECT DISTINCT b.id
                                 FROM Loan l
@@ -72,13 +104,11 @@ public class LoanRepository extends HibernateRepository<Loan, Long> {
                 return new PageableResponse<>(page, size, 0L, List.of());
             }
 
-            // Step 2: Load full Book entities
             List<Book> books = session.createQuery("""
                         FROM Book b
                         WHERE b.id IN :bookIds
                     """, Book.class).setParameter("bookIds", bookIds).getResultList();
 
-            // Step 3: Count active loans per book
             Map<Long, Long> loanedCopiesMap = session.createQuery("""
                                 SELECT b.id, COUNT(l)
                                 FROM Loan l
@@ -88,16 +118,14 @@ public class LoanRepository extends HibernateRepository<Loan, Long> {
                             """, Object[].class).setParameter("bookIds", bookIds).getResultList().stream()
                     .collect(Collectors.toMap(row -> (Long) row[0], row -> (Long) row[1]));
 
-            // Step 4: Build result manually
             List<LoanedBookInformationModel> data = books.stream().map(book -> {
-                long totalCopies = book.getCopiesAvailable(); // assuming this field is "total"
+                long totalCopies = book.getCopiesAvailable();
                 long loanedCopies = loanedCopiesMap.getOrDefault(book.getBookId(), 0L);
                 long availableCopies = totalCopies - loanedCopies;
                 return new LoanedBookInformationModel(book.getBookId(), book.getTitle(),
                         availableCopies, loanedCopies, totalCopies);
             }).toList();
 
-            // Step 5: Total count for pagination
             long totalElements = session.createQuery("""
                         SELECT COUNT(DISTINCT b.id)
                         FROM Loan l
@@ -108,6 +136,5 @@ public class LoanRepository extends HibernateRepository<Loan, Long> {
             return new PageableResponse<>(page, size, totalElements, data);
         }
     }
-
 
 }

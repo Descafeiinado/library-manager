@@ -95,3 +95,19 @@
     -fx-border-color: #e74c3c;
     -fx-border-width: 1.5px;
 }
+
+.lm-id-card {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #0066cc;
+    -fx-border-width: 1.5;
+    -fx-background-radius: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
+}
+
+.lm-id-close-button {
+    -fx-background-color: #0066cc;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6 18 6 18;
+    -fx-background-radius: 4;
+}

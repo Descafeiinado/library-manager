@@ -8,4 +8,5 @@ public class PluginIcons {
 
     public static final String LOANS = "/img/loans.png";
     public static final String RETURN = "/img/return.png";
+    public static final String VIEW = "/img/view.png";
 }

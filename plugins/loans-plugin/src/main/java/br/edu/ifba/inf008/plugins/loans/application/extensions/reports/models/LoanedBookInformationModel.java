@@ -17,14 +17,17 @@ public class LoanedBookInformationModel {
 
     @TableLabel("Available")
     @TableColumnOrientation(Pos.CENTER)
+    @TableColumnSize(90)
     private Long availableCopies;
 
     @TableLabel("Loaned")
     @TableColumnOrientation(Pos.CENTER)
+    @TableColumnSize(90)
     private Long loanedCopies;
 
     @TableLabel("Total")
     @TableColumnOrientation(Pos.CENTER)
+    @TableColumnSize(90)
     private Long totalCopies;
 
     public LoanedBookInformationModel(Long bookId, String bookTitle, Long availableCopies, Long loanedCopies, Long totalCopies) {

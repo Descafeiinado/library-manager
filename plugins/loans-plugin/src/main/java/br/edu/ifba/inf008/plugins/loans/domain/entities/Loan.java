@@ -1,5 +1,6 @@
 package br.edu.ifba.inf008.plugins.loans.domain.entities;
 
+import br.edu.ifba.inf008.core.ui.components.table.annotations.TableColumnOrientation;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableColumnSize;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableIgnore;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableLabel;
@@ -14,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import javafx.geometry.Pos;
 
 @Entity
 @Table(name = "loans")
@@ -29,6 +31,7 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "loan_id", nullable = false, unique = true)
     @TableLabel("#")
+    @TableColumnOrientation(Pos.CENTER)
     @TableColumnSize(50)
     private Long loanId;
 
@@ -42,6 +45,8 @@ public class Loan {
 
     @Column(name = "loan_date", columnDefinition = "DATE NOT NULL DEFAULT CURRENT_TIMESTAMP")
     @TableIgnore
+    @TableLabel("Loaned on")
+    @TableColumnOrientation(Pos.CENTER)
     private LocalDate loanDate = LocalDate.now();
 
     @Column(name = "return_date", columnDefinition = "DATE DEFAULT NULL")
@@ -100,6 +105,7 @@ public class Loan {
 
     @TableLabel("Status")
     @TableColumnSize(160)
+    @TableColumnOrientation(Pos.CENTER)
     public String getStatus() {
         if (returnDate == null) {
             LocalDate now = LocalDate.now();

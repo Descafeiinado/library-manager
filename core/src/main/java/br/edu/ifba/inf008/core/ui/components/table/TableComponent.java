@@ -10,6 +10,7 @@ import br.edu.ifba.inf008.core.ui.components.table.interfaces.TableAction;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -46,14 +47,21 @@ public class TableComponent<T> extends VBox {
     private final Class<T> clazz;
     private final BiFunction<Integer, Integer, PageableResponse<T>> loader;
 
+    private List<String> bypassableIgnoredFields;
     private int currentPage = 0;
     private int pageSize = 10;
     private long totalElements = 0;
 
     public TableComponent(Class<T> clazz,
             BiFunction<Integer, Integer, PageableResponse<T>> loader) {
+        this(clazz, loader, new ArrayList<>());
+    }
+
+    public TableComponent(Class<T> clazz,
+            BiFunction<Integer, Integer, PageableResponse<T>> loader, List<String> bypassableIgnoredFields) {
         this.clazz = clazz;
         this.loader = loader;
+        this.bypassableIgnoredFields = bypassableIgnoredFields;
 
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -133,12 +141,24 @@ public class TableComponent<T> extends VBox {
      */
     private void createColumnsFromClass() {
         for (Field field : clazz.getDeclaredFields()) {
-            if (field.isAnnotationPresent(TableIgnore.class) || Modifier.isStatic(
+            if (Modifier.isStatic(
                     field.getModifiers())) {
                 continue;
             }
 
             field.setAccessible(true);
+
+            if (field.isAnnotationPresent(TableIgnore.class)) {
+                TableIgnore ignoreAnnotation = field.getAnnotation(TableIgnore.class);
+
+                System.out.println("ignorable field: " + field.getName() + " - "
+                        + ignoreAnnotation.getClass().getName());
+
+                if (!bypassableIgnoredFields.contains(field.getName())) {
+                    System.out.println(field.getName() + " - " + ignoreAnnotation.getClass().getName() + " - " + bypassableIgnoredFields);
+                    continue;
+                }
+            }
 
             String headerName = capitalize(field.getName());
 
