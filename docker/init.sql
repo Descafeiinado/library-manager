@@ -1,7 +1,5 @@
-CREATE
-DATABASE IF NOT EXISTS bookstore;
-USE
-bookstore;
+CREATE DATABASE IF NOT EXISTS bookstore;
+USE bookstore;
 
 CREATE TABLE users
 (

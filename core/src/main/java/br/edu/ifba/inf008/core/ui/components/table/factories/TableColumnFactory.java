@@ -1,6 +1,7 @@
 package br.edu.ifba.inf008.core.ui.components.table.factories;
 
 import br.edu.ifba.inf008.core.domain.interfaces.Nameable;
+import br.edu.ifba.inf008.core.ui.components.table.annotations.TableColumnOrientation;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableColumnSize;
 import br.edu.ifba.inf008.core.ui.components.table.annotations.TableLabel;
 import java.lang.reflect.Field;
@@ -13,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.function.Function;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -42,9 +44,12 @@ public class TableColumnFactory {
                 return null;
             }
         };
-        double width = method.isAnnotationPresent(TableColumnSize.class) ? method.getAnnotation(
-                TableColumnSize.class).value() : 150;
-        return createColumn(headerName, valueProvider, width);
+        double width = method.isAnnotationPresent(TableColumnSize.class)
+                ? method.getAnnotation(TableColumnSize.class).value() : 150;
+        Pos alignment = method.isAnnotationPresent(TableColumnOrientation.class)
+                ? method.getAnnotation(TableColumnOrientation.class).value() : Pos.CENTER_LEFT;
+
+        return createColumn(headerName, valueProvider, width, alignment);
     }
 
     /**
@@ -63,9 +68,12 @@ public class TableColumnFactory {
                 return null;
             }
         };
-        double width = field.isAnnotationPresent(TableColumnSize.class) ? field.getAnnotation(
-                TableColumnSize.class).value() : 150;
-        return createColumn(headerName, valueProvider, width);
+        double width = field.isAnnotationPresent(TableColumnSize.class)
+                ? field.getAnnotation(TableColumnSize.class).value() : 150;
+        Pos alignment = field.isAnnotationPresent(TableColumnOrientation.class)
+                ? field.getAnnotation(TableColumnOrientation.class).value() : Pos.CENTER_LEFT;
+
+        return createColumn(headerName, valueProvider, width, alignment);
     }
 
     /**
@@ -74,11 +82,14 @@ public class TableColumnFactory {
      * @param headerName    the header name for the column
      * @param valueProvider a function that provides the value for each cell in the column
      * @param prefWidth     the preferred width of the column
+     * @param alignment     the alignment of the content inside the cells
      * @param <T>           the type of the table items
      * @return a TableColumn with the specified properties
      */
     private static <T> TableColumn<T, String> createColumn(String headerName,
-            Function<T, Object> valueProvider, double prefWidth) {
+            Function<T, Object> valueProvider,
+            double prefWidth,
+            Pos alignment) {
         TableColumn<T, String> column = new TableColumn<>(headerName);
 
         column.setCellFactory(col -> new TableCell<>() {
@@ -87,6 +98,9 @@ public class TableColumnFactory {
             {
                 label.setWrapText(true);
                 label.setMaxWidth(Double.MAX_VALUE);
+                label.setAlignment(alignment);
+
+                setAlignment(alignment);
             }
 
             @Override
@@ -134,5 +148,4 @@ public class TableColumnFactory {
             default -> value.toString();
         };
     }
-
 }

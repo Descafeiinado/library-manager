@@ -166,6 +166,7 @@ public class PluginController implements IPluginController {
 
             while (iterator.hasNext()) {
                 PluginMetadata plugin = iterator.next();
+
                 if (Arrays.stream(plugin.dependencies()).allMatch(loaded::contains)) {
                     loadOrder.add(plugin);
                     loaded.add(plugin.name());
@@ -184,6 +185,7 @@ public class PluginController implements IPluginController {
         return loadOrder;
     }
 
+
     /**
      * Loads and initializes the plugins in the given load order using
      * {@link CombinedPluginClassLoader}.
@@ -200,6 +202,10 @@ public class PluginController implements IPluginController {
 
                 for (String dependency : plugin.dependencies()) {
                     Optional.ofNullable(pluginLoaders.get(dependency)).ifPresent(parents::add);
+                }
+
+                for (String softDep : plugin.softDependencies()) {
+                    Optional.ofNullable(pluginLoaders.get(softDep)).ifPresent(parents::add);
                 }
 
                 CombinedPluginClassLoader loader = new CombinedPluginClassLoader(
@@ -222,5 +228,6 @@ public class PluginController implements IPluginController {
                 e.printStackTrace();
             }
         }
+
     }
 }

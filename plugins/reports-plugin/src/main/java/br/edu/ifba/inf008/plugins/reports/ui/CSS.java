@@ -1,4 +1,4 @@
-package br.edu.ifba.inf008.plugins.loans.ui;
+package br.edu.ifba.inf008.plugins.reports.ui;
 
 /**
  * Class containing paths to the CSS files used in the Loan Management UI. This class is used to
@@ -6,5 +6,5 @@ package br.edu.ifba.inf008.plugins.loans.ui;
  */
 public class CSS {
 
-    public static final String LOAN_MANAGEMENT = "/css/loan-management.css";
+    public static final String REPORTS = "/css/reports.css";
 }

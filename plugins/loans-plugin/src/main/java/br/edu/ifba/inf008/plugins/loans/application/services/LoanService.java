@@ -7,6 +7,7 @@ import br.edu.ifba.inf008.plugins.books.domain.entities.Book;
 import br.edu.ifba.inf008.plugins.books.domain.exceptions.BookNotFoundException;
 import br.edu.ifba.inf008.plugins.books.infrastructure.managers.BookAvailabilityManager;
 import br.edu.ifba.inf008.plugins.books.infrastructure.repositories.BookRepository;
+import br.edu.ifba.inf008.plugins.loans.application.extensions.reports.models.LoanedBookInformationModel;
 import br.edu.ifba.inf008.plugins.loans.domain.entities.Loan;
 import br.edu.ifba.inf008.plugins.loans.domain.exceptions.BookNotAvailableToLoanException;
 import br.edu.ifba.inf008.plugins.loans.domain.exceptions.LoanAlreadyReturnedException;

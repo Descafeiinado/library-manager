@@ -1,7 +1,7 @@
 package br.edu.ifba.inf008.core.ui;
 
 /**
- * CSS class containing paths to the CSS files used in the application. This class is used to
+ * Class containing paths to the CSS files used in the application. This class is used to
  * centralize the paths to the CSS files, making it easier to manage and update them.
  */
 public class CSS {

@@ -6,6 +6,7 @@ import br.edu.ifba.inf008.core.IUIController;
 import br.edu.ifba.inf008.core.domain.annotations.Plugin;
 import br.edu.ifba.inf008.core.infrastructure.managers.HibernateManager;
 import br.edu.ifba.inf008.core.ui.models.TabInformation;
+import br.edu.ifba.inf008.plugins.loans.application.extensions.ReportsExtension;
 import br.edu.ifba.inf008.plugins.loans.application.services.LoanService;
 import br.edu.ifba.inf008.plugins.loans.domain.entities.Loan;
 import br.edu.ifba.inf008.plugins.loans.infrastructure.providers.LoanedBooksAvailabilityProvider;
@@ -13,7 +14,7 @@ import br.edu.ifba.inf008.plugins.loans.ui.CSS;
 import br.edu.ifba.inf008.plugins.loans.ui.PluginIcons;
 import br.edu.ifba.inf008.plugins.loans.ui.views.MainView;
 
-@Plugin(name = "loan-management", dependencies = {"book-management", "users-management"})
+@Plugin(name = "loan-management", dependencies = {"book-management", "users-management"}, softDependencies = {"reports"})
 public class LoanManagement implements IPlugin {
 
     private LoanService loanService;
@@ -40,6 +41,13 @@ public class LoanManagement implements IPlugin {
 
         LoanedBooksAvailabilityProvider.initialize();
 
+        try {
+            ReportsExtension.initialize();
+
+            System.out.println("Reports extension initialized successfully.");
+        } catch (Exception e) {
+            System.err.println("Error initializing reports extension");
+        }
     }
 
 }
