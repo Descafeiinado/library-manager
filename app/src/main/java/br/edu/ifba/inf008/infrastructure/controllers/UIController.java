@@ -190,7 +190,7 @@ public class UIController extends Application implements IUIController {
         rootLayout.setLeft(sidebar);
         rootLayout.setCenter(centerContent);
 
-        Scene scene = new Scene(rootLayout, 960, 600);
+        Scene scene = new Scene(rootLayout, 960, 605);
 
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -1,5 +1,5 @@
 .um-main-content {
-    -fx-padding: 20;
+    -fx-padding: 15;
     -fx-background-color: #f9f9f9;
 }
 
@@ -16,7 +16,6 @@
 .um-icon-button {
     -fx-background-color: #4CAF50;
     -fx-text-fill: white;
-    -fx-padding: 6 12;
     -fx-background-radius: 6;
     -fx-font-size: 13px;
     -fx-graphic-text-gap: 6px;

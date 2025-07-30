@@ -151,11 +151,7 @@ public class TableComponent<T> extends VBox {
             if (field.isAnnotationPresent(TableIgnore.class)) {
                 TableIgnore ignoreAnnotation = field.getAnnotation(TableIgnore.class);
 
-                System.out.println("ignorable field: " + field.getName() + " - "
-                        + ignoreAnnotation.getClass().getName());
-
                 if (!bypassableIgnoredFields.contains(field.getName())) {
-                    System.out.println(field.getName() + " - " + ignoreAnnotation.getClass().getName() + " - " + bypassableIgnoredFields);
                     continue;
                 }
             }
@@ -271,8 +267,8 @@ public class TableComponent<T> extends VBox {
                         button.setGraphic(uiController.loadIcon(action.getIconPath()));
                         button.setTooltip(new Tooltip(action.getLabel()));
                         button.setOnAction(e -> action.onAction(rowData));
-                        button.setMinSize(24, 24);
-                        button.setMaxSize(24, 24);
+                        button.setMinSize(23, 23);
+                        button.setMaxSize(23, 23);
 
                         button.getStyleClass().add("table-action-button");
 

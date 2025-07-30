@@ -50,9 +50,9 @@ public class LoansByBookDialog extends Stage {
         root.getStyleClass().add("lm-id-card");
 
         root.setPrefWidth(790);
-        root.setMaxHeight(725);
-        root.setPrefHeight(725);
-        root.setMinHeight(725);
+        root.setMaxHeight(728);
+        root.setPrefHeight(728);
+        root.setMinHeight(728);
 
         StackPane photoPane = new StackPane();
         photoPane.setPrefSize(80, 80);

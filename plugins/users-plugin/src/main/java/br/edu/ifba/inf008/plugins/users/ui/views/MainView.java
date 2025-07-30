@@ -27,7 +27,7 @@ public class MainView extends VBox {
     private final TableComponent<User> tableComponent;
 
     public MainView(IUIController uiController, UserService userService) {
-        super(10);
+        super(8);
         this.uiController = uiController;
         this.getStyleClass().add("um-main-content");
 
