@@ -4,7 +4,6 @@ import br.edu.ifba.inf008.core.domain.models.PageRequest;
 import br.edu.ifba.inf008.core.domain.models.PageableResponse;
 import br.edu.ifba.inf008.core.infrastructure.managers.HibernateManager;
 import br.edu.ifba.inf008.core.infrastructure.repositories.Repository;
-import jakarta.persistence.Table;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -118,15 +117,28 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
     @Override
     public PageableResponse<T> findAll(PageRequest pageRequest) {
         try (Session session = getSession()) {
-            List<T> content = session.createQuery("from " + entityClass.getName(), entityClass)
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+
+            // --- Selection ---
+            CriteriaQuery<T> selectQuery = cb.createQuery(entityClass);
+            Root<T> selectRoot = selectQuery.from(entityClass);
+
+            selectQuery.select(selectRoot);
+
+            List<T> content = session.createQuery(selectQuery)
                     .setFirstResult(pageRequest.page() * pageRequest.limit())
-                    .setMaxResults(pageRequest.limit()).list();
+                    .setMaxResults(pageRequest.limit())
+                    .list();
 
-            long totalElements = (long) session.createQuery(
-                    "select count(*) from " + entityClass.getName()).uniqueResult();
+            // --- Counting ---
+            CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+            Root<T> countRoot = countQuery.from(entityClass);
 
-            return new PageableResponse<>(pageRequest.page(), pageRequest.limit(), totalElements,
-                    content);
+            countQuery.select(cb.count(countRoot));
+
+            Long count = session.createQuery(countQuery).uniqueResult();
+
+            return new PageableResponse<>(pageRequest.page(), pageRequest.limit(), count, content);
         }
     }
 
@@ -142,28 +154,35 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
     public PageableResponse<T> findAll(PageRequest pageRequest, String fieldName, Object value) {
         try (Session session = getSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<T> cq = cb.createQuery(entityClass);
 
-            Root<T> root = cq.from(entityClass);
+            // --- Selection ---
+            CriteriaQuery<T> selectQuery = cb.createQuery(entityClass);
+            Root<T> selectRoot = selectQuery.from(entityClass);
 
-            Predicate predicate = cb.equal(root.get(fieldName), value);
+            Predicate selectPredicate = value == null
+                    ? cb.isNull(selectRoot.get(fieldName))
+                    : cb.equal(selectRoot.get(fieldName), value);
 
-            if (value == null) {
-                predicate = cb.isNull(root.get(fieldName));
-            }
+            selectQuery.select(selectRoot).where(selectPredicate);
 
-            cq.select(root).where(predicate);
-
-            List<T> content = session.createQuery(cq)
+            List<T> content = session.createQuery(selectQuery)
                     .setFirstResult(pageRequest.page() * pageRequest.limit())
-                    .setMaxResults(pageRequest.limit()).list();
+                    .setMaxResults(pageRequest.limit())
+                    .list();
 
-            long totalElements = (long) session.createQuery(
-                    "select count(*) from " + entityClass.getName() + " where " + fieldName
-                            + " = :value").setParameter("value", value).uniqueResult();
+            // --- Counting ---
+            CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+            Root<T> countRoot = countQuery.from(entityClass);
 
-            return new PageableResponse<>(pageRequest.page(), pageRequest.limit(), totalElements,
-                    content);
+            Predicate countPredicate = value == null
+                    ? cb.isNull(countRoot.get(fieldName))
+                    : cb.equal(countRoot.get(fieldName), value);
+
+            countQuery.select(cb.count(countRoot)).where(countPredicate);
+
+            Long count = session.createQuery(countQuery).uniqueResult();
+
+            return new PageableResponse<>(pageRequest.page(), pageRequest.limit(), count, content);
         }
     }
 
@@ -225,21 +244,4 @@ public class HibernateRepository<T, ID extends Serializable> implements Reposito
         return HibernateManager.getSession();
     }
 
-    /**
-     * Gets the table name for the entity class. If the entity class does not have a @Table
-     * annotation, it returns the simple class name.
-     *
-     * @return the table name
-     */
-    private String getTableName() {
-        String fallback = entityClass.getSimpleName();
-
-        try {
-            Table tableAnnotation = entityClass.getAnnotation(Table.class);
-
-            return tableAnnotation.name();
-        } catch (Exception exception) {
-            return fallback;
-        }
-    }
 }

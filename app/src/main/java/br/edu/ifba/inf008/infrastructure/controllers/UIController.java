@@ -72,9 +72,6 @@ public class UIController extends Application implements IUIController {
             return;
         }
 
-        System.err.println(
-                "Failed to load stylesheet: " + path + " - Searching in plugin class loaders.");
-
         boolean loadedFromPlugins = false;
 
         for (ClassLoader pluginClassLoader : Core.getInstance().getPluginController()
@@ -103,7 +100,6 @@ public class UIController extends Application implements IUIController {
 
         try {
             scene.getStylesheets().add(stylesheetResource.toExternalForm());
-            System.out.println("[" + loaderName + "] Loaded stylesheet: " + correctedPath);
             return true;
         } catch (Exception e) {
             System.err.println(
@@ -132,9 +128,6 @@ public class UIController extends Application implements IUIController {
             icon = createIconFromPath(path, pluginClassLoader);
 
             if (icon != null) {
-                System.out.println(
-                        "Loaded icon from plugin classloader: " + pluginClassLoader.getClass()
-                                .getSimpleName());
                 return icon;
             }
         }
@@ -159,8 +152,6 @@ public class UIController extends Application implements IUIController {
             view.setPreserveRatio(true);
             view.setSmooth(true);
 
-            System.out.println(
-                    "[" + loader.getClass().getSimpleName() + "] Loaded icon: " + correctedPath);
             return view;
         } catch (Exception e) {
             System.err.println("[" + loader.getClass().getSimpleName() + "] Error loading icon: "
@@ -232,21 +223,39 @@ public class UIController extends Application implements IUIController {
         sidebar.addTab(MAIN_TAB, loadIcon(Icons.HOUSE));
         sidebar.selectTab(MAIN_TAB);
 
-        Label title = new Label("Welcome to the library system!");
+        Label title = new Label("Welcome to the Library System!");
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333333;"
-                + "-fx-padding: 5px; -fx-border-radius: 5px;" + "-fx-background-radius: 5px;");
+                + "-fx-padding: 5px; -fx-border-radius: 5px; -fx-background-radius: 5px;");
 
-        Label description = new Label(
-                "This is the main tab of the library system. You can access various features from here.");
-        description.setStyle("-fx-font-size: 16px; -fx-text-fill: #666666; -fx-padding: 5px; "
-                + "-fx-border-radius: 5px; -fx-background-radius: 5px;");
+        Label description = getMainTabDescription();
 
-        VBox mainTabContent = new VBox();
+        VBox mainTabContent = new VBox(10);
         mainTabContent.getChildren().addAll(title, description);
 
         centerContent.getChildren().add(mainTabContent);
         lazyTabContents.put(MAIN_TAB, () -> mainTabContent);
     }
+
+    private static Label getMainTabDescription() {
+        Label description = new Label(
+                """
+                This is the main tab of the library system. \
+                From here, you can navigate to different features such as managing books and users.
+                
+                Note: This system uses *soft-deletion*, which means data is never physically removed from the database. \
+                Even deactivated or deleted records (e.g., users or books) may still appear in references and logs, \
+                as they are preserved for auditability and historical consistency.
+                
+                Important: Loans are also preserved and not automatically returned when related books or users are deactivated. \
+                This ensures integrity of historical data and prevents silent loss of transaction records."""
+        );
+
+        description.setWrapText(true);
+        description.setStyle("-fx-font-size: 16px; -fx-text-fill: #666666; -fx-padding: 5px; "
+                + "-fx-border-radius: 5px; -fx-background-radius: 5px;");
+        return description;
+    }
+
 
     private void updateCenterContent(String tabText) {
         centerContent.getChildren().clear();

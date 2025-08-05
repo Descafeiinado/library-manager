@@ -4,6 +4,7 @@ import br.edu.ifba.inf008.core.domain.models.PageRequest;
 import br.edu.ifba.inf008.core.domain.models.PageableResponse;
 import br.edu.ifba.inf008.core.infrastructure.repositories.impl.HibernateRepository;
 import br.edu.ifba.inf008.plugins.books.domain.entities.Book;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -32,6 +33,15 @@ public class BookRepository extends HibernateRepository<Book, Long> {
      */
     public PageableResponse<Book> findAllNonDeactivated(PageRequest pageRequest) {
         return findAll(pageRequest, "deactivatedAt", null);
+    }
+
+    /**
+     * Finds all books that are not deactivated.
+     *
+     * @return a response containing books that are not deactivated
+     */
+    public List<Book> findAllNonDeactivated() {
+        return findAll("deactivatedAt", null);
     }
 
     /**

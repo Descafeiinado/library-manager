@@ -55,8 +55,8 @@ public class CreateLoanDialog extends Stage {
         initModality(Modality.APPLICATION_MODAL);
         initStyle(StageStyle.UTILITY);
 
-        List<User> users = UserRepository.getInstance().findAll();
-        List<Book> books = BookRepository.getInstance().findAll();
+        List<User> users = UserRepository.getInstance().findAllNonDeactivated();
+        List<Book> books = BookRepository.getInstance().findAllNonDeactivated();
 
         userField = createSearchableComboBox(users, User::getName);
         bookField = createSearchableComboBox(books,
@@ -71,7 +71,7 @@ public class CreateLoanDialog extends Stage {
         Button createButton = new Button("Create");
         createButton.getStyleClass().add("lm-save-button");
 
-        createButton.setOnAction(e -> {
+        createButton.setOnAction(_ -> {
             clearErrors();
 
             User user = userField.getValue();
@@ -173,7 +173,7 @@ public class CreateLoanDialog extends Stage {
             Function<T, String> stringMapper) {
         ComboBox<T> comboBox = new ComboBox<>();
         FilteredList<T> filteredItems = new FilteredList<>(FXCollections.observableArrayList(items),
-                p -> true);
+                _ -> true);
         comboBox.setItems(filteredItems);
 
         comboBox.setConverter(new StringConverter<>() {
@@ -192,7 +192,7 @@ public class CreateLoanDialog extends Stage {
 
         comboBox.setEditable(true);
 
-        comboBox.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+        comboBox.getEditor().textProperty().addListener((_, _, newValue) -> {
             final T selected = comboBox.getSelectionModel().getSelectedItem();
             if (selected != null && stringMapper.apply(selected).equals(newValue)) {
                 return;
@@ -206,14 +206,12 @@ public class CreateLoanDialog extends Stage {
             });
         });
 
-        comboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-            Platform.runLater(() -> {
-                if (newVal != null) {
-                    comboBox.getEditor().setText(stringMapper.apply(newVal));
-                    filteredItems.setPredicate(item -> true);
-                }
-            });
-        });
+        comboBox.valueProperty().addListener((_, _, newVal) -> Platform.runLater(() -> {
+            if (newVal != null) {
+                comboBox.getEditor().setText(stringMapper.apply(newVal));
+                filteredItems.setPredicate(_ -> true);
+            }
+        }));
 
         return comboBox;
     }

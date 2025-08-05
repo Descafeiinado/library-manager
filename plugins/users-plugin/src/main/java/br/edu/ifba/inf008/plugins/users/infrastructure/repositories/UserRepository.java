@@ -4,6 +4,7 @@ import br.edu.ifba.inf008.core.domain.models.PageRequest;
 import br.edu.ifba.inf008.core.domain.models.PageableResponse;
 import br.edu.ifba.inf008.core.infrastructure.repositories.impl.HibernateRepository;
 import br.edu.ifba.inf008.plugins.users.domain.entities.User;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -32,6 +33,15 @@ public class UserRepository extends HibernateRepository<User, Long> {
      */
     public boolean existsByEmail(String email) {
         return findByEmail(email).isPresent();
+    }
+
+    /**
+     * Finds all users that are not deactivated.
+     *
+     * @return a response containing users that are not deactivated
+     */
+    public List<User> findAllNonDeactivated() {
+        return findAll("deactivatedAt", null);
     }
 
     /**

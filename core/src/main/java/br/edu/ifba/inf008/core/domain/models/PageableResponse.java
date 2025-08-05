@@ -39,4 +39,14 @@ public class PageableResponse<T> {
         return content;
     }
 
+
+    @Override
+    public String toString() {
+        return "PageableResponse{" +
+                "page=" + page +
+                ", size=" + size +
+                ", totalElements=" + totalElements +
+                ", content=" + content +
+                '}';
+    }
 }

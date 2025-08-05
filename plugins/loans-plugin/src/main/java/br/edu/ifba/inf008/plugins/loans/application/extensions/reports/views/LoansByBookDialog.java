@@ -9,7 +9,6 @@ import br.edu.ifba.inf008.core.ui.components.table.TableComponent;
 import br.edu.ifba.inf008.plugins.loans.application.extensions.reports.models.LoanedBookInformationModel;
 import br.edu.ifba.inf008.plugins.loans.domain.entities.Loan;
 import br.edu.ifba.inf008.plugins.loans.infrastructure.repositories.LoanRepository;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -87,7 +86,7 @@ public class LoansByBookDialog extends Stage {
         );
 
         Button closeButton = new Button("Close");
-        closeButton.setOnAction(e -> close());
+        closeButton.setOnAction(_ -> close());
         closeButton.setDefaultButton(true);
         closeButton.getStyleClass().add("lm-id-close-button");
 

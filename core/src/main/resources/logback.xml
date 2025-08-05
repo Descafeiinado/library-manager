@@ -1,0 +1,7 @@
+<configuration>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.hibernate.type.descriptor.sql" level="OFF"/>
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
